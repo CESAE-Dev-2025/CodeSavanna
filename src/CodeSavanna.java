@@ -47,6 +47,13 @@ public class CodeSavanna {
 
     }
 
+    /**
+     * Displays a menu for listing the contents of different files, such as 'animais', 'clientes', and 'interacoes'.
+     *
+     * @param animals      A 2D String array representing the data in the 'animais' file.
+     * @param clients      A 2D String array representing the data in the 'clientes' file.
+     * @param interactions A 2D String array representing the data in the 'interacoes' file.
+     */
     static void printFileMenu(String[][] animals, String[][] clients, String[][] interactions) {
         int option;
 
@@ -81,6 +88,32 @@ public class CodeSavanna {
                     break;
             }
         } while (option != 0);
+    }
+
+
+    private static void printInteractionsStats(String[][] interactions) {
+        int visitCount = countByColumnValue(interactions, 2, "VISITA");
+        int showCount = countByColumnValue(interactions, 2, "ESPETACULO");
+        int feedCount = countByColumnValue(interactions, 2, "ALIMENTACAO");
+        int sponsorCount = countByColumnValue(interactions, 2, "APADRINHAMENTO");
+
+        // TODO: Melhorar layout da impressão
+        System.out.println("Total de interações: " + (interactions.length - 1)); // Excluimos a linha com os cabeçalhos
+        System.out.println("VISITA : " + visitCount);
+        System.out.println("ESPETACULO : " + showCount);
+        System.out.println("ALIMENTACAO : " + feedCount);
+        System.out.println("APADRINHAMENTO: " + sponsorCount);
+    }
+
+    private static int countByColumnValue(String[][] matrix, int column, String groupCriteria) {
+
+        int count = 0;
+        for (int i = 0; i < matrix.length; i++) {
+            if (matrix[i][column].equals(groupCriteria)) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
@@ -130,7 +163,7 @@ public class CodeSavanna {
                     printFileMenu(animals, clients, interactions);
                     break;
                 case 2:
-                    System.out.println("2 - Estatísticas gerais de interações");
+                    printInteractionsStats(interactions);
                     break;
                 case 3:
                     System.out.println("3 - Receita total por tipo de interação");
