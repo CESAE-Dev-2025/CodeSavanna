@@ -156,6 +156,8 @@ public class utils {
 
         System.out.println();
         for (int i = 0; i < matrix.length; i++) {
+            System.out.print("| ");
+            // TODO: Imprimir linha para separar cabeçalho do conteúdo (+-----+-----+-----+)
             for (int j = 0; j < matrix[0].length; j++) {
                 System.out.printf("%-" + columnLengths[j] + "s", matrix[i][j].trim());
                 if (j < matrix[0].length) {
@@ -170,12 +172,12 @@ public class utils {
     /**
      * Searches for a specified value in a particular column of a 2D matrix.
      *
-     * @param matrix The 2D String array representing the matrix to search.
-     * @param column The integer value of the column to search within the matrix.
+     * @param matrix      The 2D String array representing the matrix to search.
+     * @param column      The integer value of the column to search within the matrix.
      * @param searchValue The String value to search for within the specified column.
      * @return The count of occurrences of the search value within the specified column of the matrix.
      */
-    public static int searchValueInColumn(String[][] matrix, int column, String searchValue) {
+    public static int countValueInColumn(String[][] matrix, int column, String searchValue) {
 
         int count = 0;
         for (int i = 1; i < matrix.length; i++) {
@@ -189,8 +191,8 @@ public class utils {
     /**
      * Sums the values in a specific column of a 2D matrix based on a specified search value.
      *
-     * @param matrix The 2D String array representing the matrix where values will be summed.
-     * @param column The integer value indicating the column from which values will be summed.
+     * @param matrix      The 2D String array representing the matrix where values will be summed.
+     * @param column      The integer value indicating the column from which values will be summed.
      * @param searchValue The String value to search for in the specified column.
      * @return The total sum of values in the specified column that match the search value.
      */
@@ -202,5 +204,28 @@ public class utils {
             }
         }
         return sum;
+    }
+
+    public static String askForString(String message) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print(message);
+        return input.next().trim();
+
+    }
+
+    public static String[][] filterMatrix(String[][] matrix, int column, String value) {
+        int count = utils.countValueInColumn(matrix, 3, "A01");
+        String[][] filteredMatrix = new String[count][matrix[0].length];
+        int filteredIndex = 0;
+        
+        for (int i = 1; i < matrix.length; i++) {
+            if (matrix[i][3].equals(value)){
+                filteredMatrix[filteredIndex] = matrix[i];
+                filteredIndex++;
+            }
+        }
+        
+        return filteredMatrix;
     }
 }
