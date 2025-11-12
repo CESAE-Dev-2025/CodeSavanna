@@ -1,16 +1,15 @@
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class CodeSavanna {
 
     /**
-     * Displays a login menu with options for the user to select their login type.
-     * The method repeatedly prompts the user until a valid option is entered.
-     *
-     * @return An integer corresponding to the selected login option:
-     * 1 for "Administrador", 2 for "Cliente", and 0 for "Sair".
+     * Displays the login menu for CodeSavanna.
+     * Allows users to select between Administrator and Client options for login.
+     * Continues to prompt the user for input until '0' to exit is selected.
      */
-    static int printLoginMenu() {
-        int option;
+    static void loginMenu(String[][] animals, String[][] clients, String[][] interactions) {
+        int loginOption;
 
         do {
             System.out.println("+----------------------------------------------------------------------+");
@@ -21,11 +20,67 @@ public class CodeSavanna {
             System.out.println("1 - Administrador");
             System.out.println("2 - Cliente");
             System.out.println("0 - Sair");
+
+            Scanner sc = new Scanner(System.in);
+            loginOption = sc.nextInt();
+
+            switch (loginOption) {
+                case 1:
+                    System.out.println("1 - Administrador");
+                    if (utils.validLogin("admin")) {
+                        adminMenu(animals, clients, interactions);
+                    }
+                    break;
+                case 2:
+                    System.out.println("2 - Cliente");
+                    if (utils.validLogin("client")) {
+                        clientMenu(animals, clients, interactions);
+                    }
+                    break;
+                default:
+                    System.out.println("0 - Sair");
+                    break;
+            }
+            // TODO: Adicionar camada de login antes de apresentar o menu
+
+        } while (loginOption != 0);
+
+    }
+
+    static void printFileMenu(String[][] animals, String[][] clients, String[][] interactions) {
+        int option;
+
+        do {
+            System.out.println("+----------------------------------------------------------------------+");
+            System.out.println("|                     Menu Ficheiros - CodeSavanna                     |");
+            System.out.println("+----------------------------------------------------------------------+");
+            System.out.println("1 - Listar conteúdo do ficheiro 'animais'");
+            System.out.println("2 - Listar conteúdo do ficheiro 'clientes'");
+            System.out.println("3 - Listar conteúdo do ficheiro 'interacoes'");
+            System.out.println("0 - Voltar");
+            System.out.println("+----------------------------------------------------------------------+");
+
             Scanner sc = new Scanner(System.in);
             option = sc.nextInt();
-        } while (option < 0 || option > 2);
 
-        return option;
+            switch (option) {
+                case 1:
+                    System.out.println("Listar conteúdo do ficheiro 'animais'");
+                    utils.printMatrix(animals);
+                    break;
+                case 2:
+                    System.out.println("Listar conteúdo do ficheiro 'clientes'");
+                    utils.printMatrix(clients);
+                    break;
+                case 3:
+                    System.out.println("Listar conteúdo do ficheiro 'interacoes'");
+                    utils.printMatrix(interactions);
+                    break;
+                default:
+                    System.out.println("0 - Voltar");
+                    break;
+            }
+        } while (option != 0);
     }
 
     /**
@@ -47,7 +102,7 @@ public class CodeSavanna {
      *
      * @return An integer between 0 and 9 representing the user's menu selection.
      */
-    private static int printAdminMenu() {
+    private static void adminMenu(String[][] animals, String[][] clients, String[][] interactions) {
         int option;
 
         do {
@@ -63,14 +118,47 @@ public class CodeSavanna {
             System.out.println("7 - Espetáculo mais rentável");
             System.out.println("8 - Ranking de animais em perigo de extinção");
             System.out.println("9 - Estatísticas por habitat");
-            System.out.println("0 - Sair");
+            System.out.println("0 - Voltar");
             System.out.println("+----------------------------------------------------------------------+");
 
             Scanner sc = new Scanner(System.in);
+            System.out.print("\nOpção: ");
             option = sc.nextInt();
-        } while (option < 0 || option > 9);
 
-        return option;
+            switch (option) {
+                case 1:
+                    printFileMenu(animals, clients, interactions);
+                    break;
+                case 2:
+                    System.out.println("2 - Estatísticas gerais de interações");
+                    break;
+                case 3:
+                    System.out.println("3 - Receita total por tipo de interação");
+                    break;
+                case 4:
+                    System.out.println("4 - Animal mais popular");
+                    break;
+                case 5:
+                    System.out.println("5 - Top 3 espécies com mais apadrinhamentos");
+                    break;
+                case 6:
+                    System.out.println("6 - Listar padrinhos de um animal");
+                    break;
+                case 7:
+                    System.out.println("7 - Espetáculo mais rentável");
+                    break;
+                case 8:
+                    System.out.println("8 - Ranking de animais em perigo de extinção");
+                    break;
+                case 9:
+                    System.out.println("9 - Estatísticas por habitat");
+                    break;
+                default:
+                    System.out.println("0 - Voltar");
+                    break;
+            }
+        } while (option != 0);
+
     }
 
     /**
@@ -88,7 +176,7 @@ public class CodeSavanna {
      *
      * @return An integer between 0 and 5 representing the user's menu selection.
      */
-    private static int printClientMenu() {
+    private static void clientMenu(String[][] animals, String[][] clients, String[][] interactions) {
         int option;
 
         do {
@@ -99,116 +187,46 @@ public class CodeSavanna {
             System.out.println("1 - Ver catálogo de animais por habitat");
             System.out.println("2 - Ver atividades de um animal (espetáculos e alimentações)");
             System.out.println("3 - Simular apadrinhamento de um animal");
-            System.out.println("4 - Encontrar \"amigos de zoo\"");
-            System.out.println("5 - Jogo: adivinha a espécie");
-            System.out.println("0 - Sair");
+            System.out.println("4 - Jogo: adivinha a espécie");
+            System.out.println("0 - Voltar");
             System.out.println("+----------------------------------------------------------------------+");
 
             Scanner sc = new Scanner(System.in);
             option = sc.nextInt();
-        } while (option < 0 || option > 5);
 
-        return option;
-    }
+            switch (option) {
+                case 1:
+                    System.out.println("1 - Ver catálogo de animais por habitat");
+                    break;
+                case 2:
+                    System.out.println("2 - Ver atividades de um animal (espetáculos e alimentações)");
+                    break;
+                case 3:
+                    System.out.println("3 - Simular apadrinhamento de um animal");
+                    break;
+                case 4:
+                    System.out.println("4 - Jogo: adivinha a espécie");
+                    break;
+                default:
+                    System.out.println("0 - Voltar");
+                    break;
+            }
 
-    private static void executeAdminMenuOption(int option) {
-        switch (option) {
-            case 1:
-                System.out.println("1 - Listar conteúdo dos ficheiros");
-                break;
-            case 2:
-                System.out.println("2 - Estatísticas gerais de interações");
-                break;
-            case 3:
-                System.out.println("3 - Receita total por tipo de interação");
-                break;
-            case 4:
-                System.out.println("4 - Animal mais popular");
-                break;
-            case 5:
-                System.out.println("5 - Top 3 espécies com mais apadrinhamentos");
-                break;
-            case 6:
-                System.out.println("6 - Listar padrinhos de um animal");
-                break;
-            case 7:
-                System.out.println("7 - Espetáculo mais rentável");
-                break;
-            case 8:
-                System.out.println("8 - Ranking de animais em perigo de extinção");
-                break;
-            case 9:
-                System.out.println("9 - Estatísticas por habitat");
-                break;
-            default:
-                System.out.println("0 - Sair");
-                break;
-        }
-    }
-
-    private static void executeClientMenuOption(int option) {
-        switch (option) {
-            case 1:
-                System.out.println("1 - Ver catálogo de animais por habitat");
-                break;
-            case 2:
-                System.out.println("2 - Ver atividades de um animal (espetáculos e alimentações)");
-                break;
-            case 3:
-                System.out.println("3 - Simular apadrinhamento de um animal");
-                break;
-            case 4:
-                System.out.println("4 - Encontrar \"amigos de zoo\"");
-                break;
-            case 5:
-                System.out.println("5 - Jogo: adivinha a espécie");
-                break;
-            default:
-                System.out.println("0 - Sair");
-                break;
-        }
+        } while (option != 0);
 
     }
 
-    /**
-     * Executes an action based on the selected login option.
-     * Prints a corresponding message to the console depending on the provided option.
-     *
-     * @param opcaoLogin The login option selected by the user.
-     *                   1 represents "Administrador",
-     *                   2 represents "Cliente",
-     *                   any other value will result in exiting ("Saindo...").
-     */
-    private static void executeLoginOption(int opcaoLogin) {
+    public static void main(String[] args) throws FileNotFoundException {
+        String animalsFilePath = "files/animais.csv";
+        String clientsFilePath = "files/clientes.csv";
+        String interactionsFilePath = "files/interacoes.csv";
 
-        int menuOption;
+        String[][] animals = utils.readCsv(animalsFilePath, ";");
+        String[][] clients = utils.readCsv(clientsFilePath, ";");
+        String[][] interactions = utils.readCsv(interactionsFilePath, ";");
 
-        // TODO: Adicionar camada de login antes de apresentar o menu
-        if (opcaoLogin == 1) {
-            do {
-                menuOption = printAdminMenu();
-                executeAdminMenuOption(menuOption);
-            } while (menuOption != 0);
-        } else if (opcaoLogin == 2) {
-            do {
-                menuOption = printClientMenu();
-                executeClientMenuOption(menuOption);
-            } while (menuOption != 0);
-        } else {
-            System.out.println("Saindo...");
-        }
-
-    }
-
-    static void main() {
-        int loginOption;
-        // TODO: Adicionar camada de login antes de apresentar o menu
-        // TODO: No logoff, voltar ao menu de login
         System.out.println("Bem vindo ao CodeSavanna!");
-        do {
-            loginOption = printLoginMenu();
-            executeLoginOption(loginOption);
 
-        } while (loginOption != 0);
+        loginMenu(animals, clients, interactions);
     }
 }

@@ -1,0 +1,168 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class utils {
+    /**
+     * Validates the login credentials for a given role.
+     *
+     * @param role The role of the user trying to log in (e.g., "admin" or "client").
+     * @return true if the provided username and password match the stored credentials for the specified role, false otherwise.
+     */
+    public static boolean validLogin(String role) {
+        Scanner sc = new Scanner(System.in);
+        String[][] users = {
+                {"admin", "neo", "matrix"},
+                {"client", "leandro", "pass"}
+        };
+
+        String username, password;
+        boolean isValid = false;
+
+        System.out.print("\nUsername:");
+        username = sc.next().trim();
+
+        System.out.print("Password: ");
+        password = sc.next().trim();
+
+
+        for (int i = 0; i < users.length; i++) {
+            if (users[i][0].equals(role) && users[i][1].equals(username) && users[i][2].equals(password)) {
+                isValid = true;
+                i = users.length;
+            }
+        }
+
+        return isValid;
+    }
+
+    /**
+     * Reads the header of a CSV file and extracts the column names.
+     *
+     * @param filePath  The file path of the CSV file to read.
+     * @param columns   The number of columns in the CSV file.
+     * @param separator The separator used in the CSV file (e.g., ",", ";", "\t").
+     * @return A 2D String array containing the header row with column names.
+     * @throws FileNotFoundException If the provided file path is invalid or the file cannot be found.
+     */
+    static String[][] readCsvHeader(String filePath, int columns, String separator) throws FileNotFoundException {
+        Scanner file = new Scanner(new File(filePath));
+
+        String[][] matriz = new String[1][columns];
+        String[] linha = file.nextLine().split(separator);
+
+        for (int coluna = 0; coluna < matriz[0].length; coluna++) {
+            matriz[0][coluna] = linha[coluna];
+        }
+
+        file.close();
+
+        return matriz;
+    }
+
+    /**
+     * Retrieves the number of lines present in the specified file.
+     *
+     * @param filePath The file path of the file to count the lines from.
+     * @return The total number of lines in the file.
+     * @throws FileNotFoundException If the provided file path is invalid or the file cannot be found.
+     */
+    public static int getFileLinesCount(String filePath) throws FileNotFoundException {
+
+        Scanner in = new Scanner(new File(filePath));
+        int lineCount = 0;
+
+        while (in.hasNextLine()) {
+            lineCount++;
+            in.nextLine();
+        }
+
+        in.close();
+
+        return lineCount;
+    }
+
+    /**
+     * Retrieves the number of columns in a file based on the specified separator.
+     *
+     * @param filePath  The file path of the file to extract column count from.
+     * @param separator The separator used to distinguish columns in the file.
+     * @return The total number of columns found in the file.
+     * @throws FileNotFoundException If the provided file path is invalid or the file cannot be found.
+     */
+    public static int getFileColumns(String filePath, String separator) throws FileNotFoundException {
+
+        Scanner in = new Scanner(new File(filePath));
+        int columnCount = 0;
+
+        if (in.hasNextLine()) {
+            String currentLine = in.nextLine();
+            columnCount = currentLine.split(separator).length;
+        }
+
+        in.close();
+
+        return columnCount;
+    }
+    
+    /**
+     * Reads a CSV file and stores its contents in a 2D String array based on the specified parameters.
+     *
+     * @param filePath      The file path of the CSV file to read.
+     * @param separator     The separator used in the CSV file to split values (e.g., ",", ";", "\t").
+     * @return A 2D String array containing the data read from the CSV file.
+     * @throws FileNotFoundException If the provided file path is invalid or the file cannot be found.
+     */
+    static String[][] readCsv(String filePath, String separator) throws FileNotFoundException {
+
+        String[] currentLine;
+        int lines = getFileLinesCount(filePath);
+        int columns = getFileColumns(filePath, separator);
+        
+        String[][] matrix = new String[lines][columns];
+        Scanner file = new Scanner(new File(filePath));
+
+        int rowIndex = 0;
+        while (file.hasNextLine()) {
+            currentLine = file.nextLine().split(separator);
+            for (int coluna = 0; coluna < matrix[0].length; coluna++) {
+                matrix[rowIndex][coluna] = currentLine[coluna];
+            }
+            rowIndex++;
+        }
+
+        file.close();
+
+        return matrix;
+    }
+
+    /**
+     * Prints the given matrix to the console in a visually organized format.
+     *
+     * @param matrix The 2D String array representing the matrix to be printed.
+     */
+    public static void printMatrix(String[][] matrix) {
+
+        int[] columnLengths = new int[matrix[0].length];
+
+        for (int item = 0; item < matrix.length; item++) {
+            for (int column = 0; column < matrix[0].length; column++) {
+                if (matrix[item][column].length() > columnLengths[column]) {
+                    columnLengths[column] = matrix[item][column].length();
+                }
+            }
+        }
+
+        System.out.println();
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                System.out.printf("%-" + columnLengths[j] + "s", matrix[i][j].trim());
+                if (j < matrix[0].length) {
+                    System.out.print(" | ");
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+}
