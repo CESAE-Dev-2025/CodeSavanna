@@ -205,7 +205,7 @@ public class CodeSavanna {
 
         System.out.printf("%-12s", "Interações:");
         System.out.println(maxInteractions);
-        System.out.println("+----------------------------------------------------------------------+");
+        System.out.println("------------");
     }
 
     private static String[][] groupBySpecies(String[][] animals, String[][] interactions) {
@@ -245,49 +245,119 @@ public class CodeSavanna {
         System.out.println("+----------------------------------------------------------------------+");
     }
 
-    static void printAnimalSponsors(String[][] animals, String[][] interactions, String[][] clients) {
-        /*
-         * Listar padrinhos de um animal
-         * Pedir ao utilizador:
-         *   • ID do animal (ex.: A03)
-         * O programa deve:
-         *   1. Confirmar se o animal existe.
-         *   2. Procurar em interacoes todas as linhas com:
-         *     o tipoInteracao = APADRINHAMENTO
-         *     o idAnimal = o indicado
-         *   3. Para cada apadrinhamento, mostrar:
-         *     o Nome do cliente e email (a partir de clientes.csv)
-         *     o Valor mensal (valorPago)
-         *     o Nome do plano de apadrinhamento (nomeEvento)
-         *
-         * */
-
-        String[][] species = groupBySpecies(animals, interactions);
-
+    /**
+     * Prompts the user to input the ID of an animal and verifies its existence within the given 2D array of animals.
+     * If the provided ID is not found, the user will be repeatedly prompted until a valid ID is entered.
+     *
+     * @param animals A 2D String array representing the data of animals. Each row contains information about a specific animal,
+     *                where the first column (index 0) is assumed to store the IDs of the animals.
+     * @return The valid animal ID entered by the user.
+     */
+    static String getValidAnimal(String[][] animals) {
         Scanner input = new Scanner(System.in);
-        System.out.print("Digite o ID do animal a buscar:");
-        String selectedAnimal = input.next().trim();
+        String selectedAnimal;
+        boolean animalExists;
 
-        
-        String[][] filteredInteractions = utils.filterMatrix(interactions, 3,"A01"); 
+        do {
+            System.out.print("Digite o ID do animal a buscar: ");
+            selectedAnimal = input.next().trim().toUpperCase();     // TODO: Pode usar toUpperCase() ou toLowerCase()?
+            animalExists = utils.existsInMatrix(animals, 0, selectedAnimal);
+        } while (!animalExists);
+
+        return selectedAnimal;
+    }
+
+    /**
+     * Filters the given interactions array to include only rows where the specified 
+     * animal column matches the given animal value and the specified interaction 
+     * type column matches the given interaction type value.
+     *
+     * @param interactions A 2D String array representing the data of interactions. 
+     *                     Each row contains information about a specific interaction.
+     * @param animalColumn The index of the column in the interactions array that 
+     *                     corresponds to the animal's attribute to be filtered by.
+     * @param animalValue  The value to match in the specified animal column.
+     * @param iteractionTypeColumn The index of the column in the interactions array 
+     *                             that corresponds to the interaction type to be filtered by.
+     * @param interactionTypeValue The value to match in the specified interaction 
+     *                             type column.
+     * @return A filtered 2D String array containing only the rows that match both 
+     *         the animal value in the specified column and the interaction type 
+     *         value in the specified column.
+     */
+    public static String[][] filterByAnimalAndSponsor(String[][] interactions, int animalColumn, String animalValue, int iteractionTypeColumn, String interactionTypeValue) {
+        int count = 0;
+
+        for (int i = 1; i < interactions.length; i++) {
+            if (interactions[i][animalColumn].equals(animalValue) && interactions[i][iteractionTypeColumn].equals(interactionTypeValue)) {
+                count++;
+            }
+        }
+
+        String[][] filteredMatrix = new String[count][interactions[0].length];
+        int filteredIndex = 0;
+
+        for (int i = 1; i < interactions.length; i++) {
+            if (interactions[i][animalColumn].equals(animalValue) && interactions[i][iteractionTypeColumn].equals(interactionTypeValue)) {
+                filteredMatrix[filteredIndex] = interactions[i];
+                filteredIndex++;
+            }
+        }
+
+        return filteredMatrix;
+    }
+
+    /**
+     * Displays the list of sponsors for a specific animal. The method prompts the user to select an animal,
+     * filters the interactions to find only sponsorships for that animal, and retrieves the details of each sponsor.
+     * If no sponsors are found for the selected animal, a message is displayed.
+     *
+     * @param animals      A 2D String array representing the data of animals. Each row contains information
+     *                     about a specific animal, where the first column (index 0) stores the animal ID.
+     * @param interactions A 2D String array representing data on interactions between animals and clients.
+     *                     Each row contains information about a specific interaction, where columns represent
+     *                     attributes such as interaction type, related animal ID, and associated client ID.
+     * @param clients      A 2D String array representing the data of clients. Each row contains information
+     *                     about a specific client, where the first column (index 0) stores the client ID,
+     *                     and other columns store additional client details such as name and email.
+     */
+    static void printAnimalSponsors(String[][] animals, String[][] interactions, String[][] clients) {
+
+        String selectedAnimal = getValidAnimal(animals);
+        String[][] selectedInteractions = filterByAnimalAndSponsor(interactions, 3, selectedAnimal, 2, "APADRINHAMENTO");
+
+        if (selectedInteractions.length == 0) {
+            System.out.println("Não há padrinhos para este animal.");
+            return;
+        }
+
+        String animalName = utils.findValueAtColumn(animals, 0, selectedAnimal, 1);
 
         System.out.println();
         System.out.println("+----------------------------------------------------------------------+");
         System.out.println("|                     Listar padrinhos de um animal                    |");
         System.out.println("+----------------------------------------------------------------------+");
 
+        System.out.println("Lista de padrinhos para o animal " + selectedAnimal + " (" + animalName + "):");
 
-        for (int i = 0; i < species.length; i++) {
-            System.out.println("1) " + species[i][0]);
+        for (int i = 0; i < selectedInteractions.length; i++) {
+            String clientName = utils.findValueAtColumn(clients, 0, selectedInteractions[i][1], 1);
+            String clientEmail = utils.findValueAtColumn(clients, 0, selectedInteractions[i][1], 3);
 
-            System.out.printf("%-23s", "No de apadrinhamentos:");
-            System.out.println(species[i][1]); // sponsorCount
+            System.out.println();
+            System.out.printf("%-25s", "Nome do cliente:");
+            System.out.println(clientName);
 
-            System.out.printf("%-23s", "Valor mensal total:");
-            System.out.println(species[i][2] + " €"); // monthIncome
+            System.out.printf("%-25s", "Email do cliente:");
+            System.out.println(clientEmail);
+
+            System.out.printf("%-25s", "Valor mensal pago:");
+            System.out.println(selectedInteractions[i][5] + " €");
+
+            System.out.printf("%-25s", "Plano de apadrinhamento:");
+            System.out.println(selectedInteractions[i][4]);
+            System.out.println("------------------------");
         }
-
-        System.out.println("+----------------------------------------------------------------------+");
     }
 
     /**
@@ -339,7 +409,6 @@ public class CodeSavanna {
                     printTopSponsoredSpecies(animals, interactions);
                     break;
                 case 6:
-                    System.out.println("6 - Listar padrinhos de um animal");
                     printAnimalSponsors(animals, interactions, clients);
                     break;
                 case 7:

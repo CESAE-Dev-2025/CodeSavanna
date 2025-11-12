@@ -206,26 +206,33 @@ public class utils {
         return sum;
     }
 
-    public static String askForString(String message) {
-        Scanner input = new Scanner(System.in);
+    /**
+     * Checks if a specified value exists in a particular column of a 2D matrix.
+     *
+     * @param matrix The 2D String array representing the matrix to search through.
+     * @param column The index of the column to search within the matrix.
+     * @param value  The String value to look for in the specified column.
+     * @return true if the value is found in the specified column of the matrix, false otherwise.
+     */
+    static boolean existsInMatrix(String[][] matrix, int column, String value) {
 
-        System.out.print(message);
-        return input.next().trim();
+        for (int i = 0; i < matrix.length; i++) {
+            if (matrix[i][column].equals(value)) {
+                return true;
+            }
+        }
 
+        return false;
     }
 
-    public static String[][] filterMatrix(String[][] matrix, int column, String value) {
-        int count = utils.countValueInColumn(matrix, 3, "A01");
-        String[][] filteredMatrix = new String[count][matrix[0].length];
-        int filteredIndex = 0;
+    static String findValueAtColumn(String[][] matrix, int searchColumn, String searchValue, int responseColumn) {
         
-        for (int i = 1; i < matrix.length; i++) {
-            if (matrix[i][3].equals(value)){
-                filteredMatrix[filteredIndex] = matrix[i];
-                filteredIndex++;
+        for (int i = 0; i < matrix.length; i++) {
+            if (matrix[i][searchColumn].equals(searchValue)) {
+                return matrix[i][responseColumn];
             }
         }
         
-        return filteredMatrix;
+        return "";
     }
 }
