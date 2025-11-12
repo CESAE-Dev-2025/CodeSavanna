@@ -13,18 +13,19 @@ public class utils {
         Scanner sc = new Scanner(System.in);
         String[][] users = {
                 {"admin", "neo", "matrix"},
+                {"admin", "admin", "code"},
+                {"admin", "chefe", "!password?456"},
                 {"client", "leandro", "pass"}
         };
 
         String username, password;
         boolean isValid = false;
 
-        System.out.print("\nUsername:");
+        System.out.print("\nUsername: ");
         username = sc.next().trim();
 
         System.out.print("Password: ");
         password = sc.next().trim();
-
 
         for (int i = 0; i < users.length; i++) {
             if (users[i][0].equals(role) && users[i][1].equals(username) && users[i][2].equals(password)) {
@@ -45,7 +46,7 @@ public class utils {
      * @return A 2D String array containing the header row with column names.
      * @throws FileNotFoundException If the provided file path is invalid or the file cannot be found.
      */
-    static String[][] readCsvHeader(String filePath, int columns, String separator) throws FileNotFoundException {
+    public static String[][] readCsvHeader(String filePath, int columns, String separator) throws FileNotFoundException {
         Scanner file = new Scanner(new File(filePath));
 
         String[][] matriz = new String[1][columns];
@@ -104,21 +105,21 @@ public class utils {
 
         return columnCount;
     }
-    
+
     /**
      * Reads a CSV file and stores its contents in a 2D String array based on the specified parameters.
      *
-     * @param filePath      The file path of the CSV file to read.
-     * @param separator     The separator used in the CSV file to split values (e.g., ",", ";", "\t").
+     * @param filePath  The file path of the CSV file to read.
+     * @param separator The separator used in the CSV file to split values (e.g., ",", ";", "\t").
      * @return A 2D String array containing the data read from the CSV file.
      * @throws FileNotFoundException If the provided file path is invalid or the file cannot be found.
      */
-    static String[][] readCsv(String filePath, String separator) throws FileNotFoundException {
+    public static String[][] readCsv(String filePath, String separator) throws FileNotFoundException {
 
         String[] currentLine;
         int lines = getFileLinesCount(filePath);
         int columns = getFileColumns(filePath, separator);
-        
+
         String[][] matrix = new String[lines][columns];
         Scanner file = new Scanner(new File(filePath));
 
@@ -164,5 +165,42 @@ public class utils {
             System.out.println();
         }
         System.out.println();
+    }
+
+    /**
+     * Searches for a specified value in a particular column of a 2D matrix.
+     *
+     * @param matrix The 2D String array representing the matrix to search.
+     * @param column The integer value of the column to search within the matrix.
+     * @param searchValue The String value to search for within the specified column.
+     * @return The count of occurrences of the search value within the specified column of the matrix.
+     */
+    public static int searchValueInColumn(String[][] matrix, int column, String searchValue) {
+
+        int count = 0;
+        for (int i = 1; i < matrix.length; i++) {
+            if (matrix[i][column].equals(searchValue)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Sums the values in a specific column of a 2D matrix based on a specified search value.
+     *
+     * @param matrix The 2D String array representing the matrix where values will be summed.
+     * @param column The integer value indicating the column from which values will be summed.
+     * @param searchValue The String value to search for in the specified column.
+     * @return The total sum of values in the specified column that match the search value.
+     */
+    public static double sumValueByCriteria(String[][] matrix, int column, String searchValue) {
+        double sum = 0;
+        for (int i = 1; i < matrix.length; i++) {
+            if (matrix[i][column].equals(searchValue)) {
+                sum += Double.parseDouble(matrix[i][5]);
+            }
+        }
+        return sum;
     }
 }

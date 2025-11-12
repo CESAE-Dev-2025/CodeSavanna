@@ -4,14 +4,17 @@ import java.util.Scanner;
 public class CodeSavanna {
 
     /**
-     * Displays the login menu for CodeSavanna.
-     * Allows users to select between Administrator and Client options for login.
-     * Continues to prompt the user for input until '0' to exit is selected.
+     * Displays a login menu for users to select their login option (administrator or client).
+     *
+     * @param animals      A 2D String array representing the data in the 'animais' file.
+     * @param clients      A 2D String array representing the data in the 'clientes' file.
+     * @param interactions A 2D String array representing the data in the 'interacoes' file.
      */
     static void loginMenu(String[][] animals, String[][] clients, String[][] interactions) {
         int loginOption;
 
         do {
+            System.out.println();
             System.out.println("+----------------------------------------------------------------------+");
             System.out.println("|                          CodeSavanna - Login                         |");
             System.out.println("+----------------------------------------------------------------------+");
@@ -22,17 +25,16 @@ public class CodeSavanna {
             System.out.println("0 - Sair");
 
             Scanner sc = new Scanner(System.in);
+            System.out.print("\nOpção: ");
             loginOption = sc.nextInt();
 
             switch (loginOption) {
                 case 1:
-                    System.out.println("1 - Administrador");
                     if (utils.validLogin("admin")) {
                         adminMenu(animals, clients, interactions);
                     }
                     break;
                 case 2:
-                    System.out.println("2 - Cliente");
                     if (utils.validLogin("client")) {
                         clientMenu(animals, clients, interactions);
                     }
@@ -41,7 +43,6 @@ public class CodeSavanna {
                     System.out.println("0 - Sair");
                     break;
             }
-            // TODO: Adicionar camada de login antes de apresentar o menu
 
         } while (loginOption != 0);
 
@@ -90,55 +91,88 @@ public class CodeSavanna {
         } while (option != 0);
     }
 
-
-    private static void printInteractionsStats(String[][] interactions) {
-        int visitCount = countByColumnValue(interactions, 2, "VISITA");
-        int showCount = countByColumnValue(interactions, 2, "ESPETACULO");
-        int feedCount = countByColumnValue(interactions, 2, "ALIMENTACAO");
-        int sponsorCount = countByColumnValue(interactions, 2, "APADRINHAMENTO");
+    /**
+     * Displays statistics related to the income generated from different types of interactions based on the given 2D array.
+     *
+     * @param interactions A 2D array representing data on interactions.
+     *                     Each row contains information about a specific interaction, where the third column (index 2) represents the type of interaction.
+     *                     The available types considered for income calculation are: VISITA, ESPETACULO, ALIMENTACAO, and APADRINHAMENTO.
+     *                     The method calculates and prints the total income along with the income generated from each type of interaction.
+     */
+    static void printInteractionsIncomeStats(String[][] interactions) {
+        double visitIncome = utils.sumValueByCriteria(interactions, 2, "VISITA");
+        double showIncome = utils.sumValueByCriteria(interactions, 2, "ESPETACULO");
+        double feedIncome = utils.sumValueByCriteria(interactions, 2, "ALIMENTACAO");
+        double sponsorIncome = utils.sumValueByCriteria(interactions, 2, "APADRINHAMENTO");
+        double totalIncome = visitIncome + showIncome + feedIncome + sponsorIncome;
 
         // TODO: Melhorar layout da impressão
-        System.out.println("Total de interações: " + (interactions.length - 1)); // Excluimos a linha com os cabeçalhos
-        System.out.println("VISITA : " + visitCount);
-        System.out.println("ESPETACULO : " + showCount);
-        System.out.println("ALIMENTACAO : " + feedCount);
-        System.out.println("APADRINHAMENTO: " + sponsorCount);
-    }
-
-    private static int countByColumnValue(String[][] matrix, int column, String groupCriteria) {
-
-        int count = 0;
-        for (int i = 0; i < matrix.length; i++) {
-            if (matrix[i][column].equals(groupCriteria)) {
-                count++;
-            }
-        }
-        return count;
+        System.out.println("Total de receitas: " + totalIncome);
+        System.out.println("VISITA: " + visitIncome);
+        System.out.println("ESPETACULO: " + showIncome);
+        System.out.println("ALIMENTACAO: " + feedIncome);
+        System.out.println("APADRINHAMENTO: " + sponsorIncome);
     }
 
     /**
-     * Displays the administrator menu with various options for managing system functionalities.
-     * The method repeatedly prompts the user until a valid option is entered,
-     * ranging from 0 to 9.
-     * <p>
-     * Menu options include:
-     * 1 - List content of files
-     * 2 - General interaction statistics
-     * 3 - Total revenue by interaction type
-     * 4 - Most popular animal
-     * 5 - Top 3 species with the most sponsorships
-     * 6 - List sponsors of an animal
-     * 7 - Most profitable show
-     * 8 - Endangered species ranking
-     * 9 - Statistics by habitat
-     * 0 - Exit
+     * Prints statistics about different types of interactions based on the given 2D array.
      *
-     * @return An integer between 0 and 9 representing the user's menu selection.
+     * @param interactions A 2D array representing interactions data.
      */
-    private static void adminMenu(String[][] animals, String[][] clients, String[][] interactions) {
+    static void printInteractionsStats(String[][] interactions) {
+        int visitCount = utils.searchValueInColumn(interactions, 2, "VISITA");
+        int showCount = utils.searchValueInColumn(interactions, 2, "ESPETACULO");
+        int feedCount = utils.searchValueInColumn(interactions, 2, "ALIMENTACAO");
+        int sponsorCount = utils.searchValueInColumn(interactions, 2, "APADRINHAMENTO");
+
+        // TODO: Melhorar layout da impressão
+        System.out.println("Total de interações: " + (interactions.length - 1)); // Excluimos a linha com os cabeçalhos
+        System.out.println("VISITA: " + visitCount);
+        System.out.println("ESPETACULO: " + showCount);
+        System.out.println("ALIMENTACAO: " + feedCount);
+        System.out.println("APADRINHAMENTO: " + sponsorCount);
+    }
+
+    public static void printMostPopularAnimal(String[][] animals, String[][] interactions) {
+        int[] animalInteractions = new int[animals.length - 1]; // Salta a linha do cabeçalho
+
+        int countIndex = 0;
+        for (int i = 1; i < animals.length; i++) { // Salta a linha de cabeçalho
+            int interactionCount = 0;
+            for (int j = 1; j < interactions.length; j++) { // Salta a linha do cabeçalho
+                if (animals[i][0].equals(interactions[j][3])) {
+                    interactionCount++;
+                }
+            }
+            animalInteractions[countIndex++] = interactionCount;
+        }
+
+        int maxInteractions = animalInteractions[0];
+        int mostPopularIndex = 0;
+        for (int i = 1; i < animalInteractions.length; i++) {
+            if (animalInteractions[i] > maxInteractions) {
+                maxInteractions = animalInteractions[i];
+                mostPopularIndex = i + 1; // Adiciona a linha do cabeçalho
+            }
+        }
+
+        System.out.println("\nAnimal mais popular: " + animals[mostPopularIndex][1] + " (" + maxInteractions + " interações)");
+        System.out.println("Espécie: " + animals[mostPopularIndex][2]);
+        System.out.println("Habitat: " + animals[mostPopularIndex][3]);
+    }
+
+    /**
+     * Displays the admin menu with various options for administrative tasks.
+     *
+     * @param animals      A 2D String array representing the data of animals.
+     * @param clients      A 2D String array representing the data of clients.
+     * @param interactions A 2D String array representing the data of interactions.
+     */
+    static void adminMenu(String[][] animals, String[][] clients, String[][] interactions) {
         int option;
 
         do {
+            System.out.println();
             System.out.println("+----------------------------------------------------------------------+");
             System.out.println("|                       Menu ADMIN - CodeSavanna                       |");
             System.out.println("+----------------------------------------------------------------------+");
@@ -166,10 +200,11 @@ public class CodeSavanna {
                     printInteractionsStats(interactions);
                     break;
                 case 3:
-                    System.out.println("3 - Receita total por tipo de interação");
+                    printInteractionsIncomeStats(interactions);
                     break;
                 case 4:
                     System.out.println("4 - Animal mais popular");
+                    printMostPopularAnimal(animals, interactions);
                     break;
                 case 5:
                     System.out.println("5 - Top 3 espécies com mais apadrinhamentos");
@@ -195,24 +230,17 @@ public class CodeSavanna {
     }
 
     /**
-     * Displays the client menu with various options for the user to interact with.
-     * The method repeatedly prompts the user until a valid option is entered
-     * ranging from 0 to 5.
-     * <p>
-     * Options include:
-     * 1 - Viewing animal catalog by habitat.
-     * 2 - Viewing activities of an animal (shows and feedings).
-     * 3 - Simulating an animal sponsorship.
-     * 4 - Finding "zoo friends."
-     * 5 - Playing a guessing game about the species.
-     * 0 - Exit.
+     * Displays the client menu options for CodeSavanna.
      *
-     * @return An integer between 0 and 5 representing the user's menu selection.
+     * @param animals      A 2D String array representing the animal data.
+     * @param clients      A 2D String array representing the client data.
+     * @param interactions A 2D String array representing the interactions data.
      */
-    private static void clientMenu(String[][] animals, String[][] clients, String[][] interactions) {
+    static void clientMenu(String[][] animals, String[][] clients, String[][] interactions) {
         int option;
 
         do {
+            System.out.println();
             System.out.println("+----------------------------------------------------------------------+");
             System.out.println("|                      Menu CLIENTE - CodeSavanna                      |");
             System.out.println("+----------------------------------------------------------------------+");
@@ -225,6 +253,7 @@ public class CodeSavanna {
             System.out.println("+----------------------------------------------------------------------+");
 
             Scanner sc = new Scanner(System.in);
+            System.out.print("\nOpção: ");
             option = sc.nextInt();
 
             switch (option) {
