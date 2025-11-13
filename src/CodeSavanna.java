@@ -4,51 +4,6 @@ import java.util.Scanner;
 public class CodeSavanna {
 
     /**
-     * Displays a login menu for users to select their login option (administrator or client).
-     *
-     * @param animals      A 2D String array representing the data in the 'animais' file.
-     * @param clients      A 2D String array representing the data in the 'clientes' file.
-     * @param interactions A 2D String array representing the data in the 'interacoes' file.
-     */
-    static void loginMenu(String[][] animals, String[][] clients, String[][] interactions) {
-        int loginOption;
-
-        do {
-            System.out.println();
-            System.out.println("+----------------------------------------------------------------------+");
-            System.out.println("|                          CodeSavanna - Login                         |");
-            System.out.println("+----------------------------------------------------------------------+");
-
-            System.out.println("\nSelecione uma das opções de login abaixo:");
-            System.out.println("1 - Administrador");
-            System.out.println("2 - Cliente");
-            System.out.println("0 - Sair");
-
-            Scanner sc = new Scanner(System.in);
-            System.out.print("\nOpção: ");
-            loginOption = sc.nextInt();
-
-            switch (loginOption) {
-                case 1:
-                    if (utils.validLogin("admin")) {
-                        adminMenu(animals, clients, interactions);
-                    }
-                    break;
-                case 2:
-                    if (utils.validLogin("client")) {
-                        clientMenu(animals, clients, interactions);
-                    }
-                    break;
-                default:
-                    System.out.println("0 - Sair");
-                    break;
-            }
-
-        } while (loginOption != 0);
-
-    }
-
-    /**
      * Displays a menu for listing the contents of different files, such as 'animais', 'clientes', and 'interacoes'.
      *
      * @param animals      A 2D String array representing the data in the 'animais' file.
@@ -686,7 +641,6 @@ public class CodeSavanna {
         }
     }
 
-
     private static String[] getHabitats(String[][] animals) {
         int uniqueHabitatsCount = 0;
         boolean uniquehabitatsFound;
@@ -904,6 +858,51 @@ public class CodeSavanna {
             }
 
         } while (option != 0);
+
+    }
+
+    /**
+     * Displays a login menu for users to select their login option (administrator or client).
+     *
+     * @param animals      A 2D String array representing the data in the 'animais' file.
+     * @param clients      A 2D String array representing the data in the 'clientes' file.
+     * @param interactions A 2D String array representing the data in the 'interacoes' file.
+     */
+    static void loginMenu(String[][] animals, String[][] clients, String[][] interactions) {
+        int loginOption;
+
+        do {
+            System.out.println();
+            System.out.println("+----------------------------------------------------------------------+");
+            System.out.println("|                          CodeSavanna - Login                         |");
+            System.out.println("+----------------------------------------------------------------------+");
+
+            System.out.println("\nSelecione uma das opções de login abaixo:");
+            System.out.println("1 - Administrador");
+            System.out.println("2 - Cliente");
+            System.out.println("0 - Sair");
+
+            Scanner sc = new Scanner(System.in);
+            System.out.print("\nOpção: ");
+            loginOption = sc.nextInt();
+
+            switch (loginOption) {
+                case 1:
+                    if (utils.validLogin("admin")) {
+                        adminMenu(animals, clients, interactions);
+                    }
+                    break;
+                case 2:
+                    if (utils.validLogin("client")) {
+                        clientMenu(animals, clients, interactions);
+                    }
+                    break;
+                default:
+                    System.out.println("0 - Sair");
+                    break;
+            }
+
+        } while (loginOption != 0);
 
     }
 
