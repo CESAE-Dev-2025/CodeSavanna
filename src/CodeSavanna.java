@@ -1,17 +1,11 @@
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import static CodeSavannaUtils.utils.printResultHeader;
+import static CodeSavannaUtils.utils.*;
 
 public class CodeSavanna {
 
-    /**
-     * Displays a menu for listing the contents of different files, such as 'animais', 'clientes', and 'interacoes'.
-     *
-     * @param animals      A 2D String array representing the data in the 'animais' file.
-     * @param clients      A 2D String array representing the data in the 'clientes' file.
-     * @param interactions A 2D String array representing the data in the 'interacoes' file.
-     */
+    
     static void printFileMenu(String[][] animals, String[][] clients, String[][] interactions) {
         int option;
 
@@ -30,15 +24,15 @@ public class CodeSavanna {
             switch (option) {
                 case 1:
                     printResultHeader("Listar conteúdo do ficheiro 'animais'");
-                    utils.printMatrix(animals);
+                    printMatrix(animals);
                     break;
                 case 2:
                     printResultHeader("Listar conteúdo do ficheiro 'clientes'");
-                    utils.printMatrix(clients);
+                    printMatrix(clients);
                     break;
                 case 3:
                     printResultHeader("Listar conteúdo do ficheiro 'interacoes'");
-                    utils.printMatrix(interactions);
+                    printMatrix(interactions);
                     break;
                 default:
                     System.out.println("0 - Voltar");
@@ -47,19 +41,11 @@ public class CodeSavanna {
         } while (option != 0);
     }
 
-    /**
-     * Displays statistics related to the income generated from different types of interactions based on the given 2D array.
-     *
-     * @param interactions A 2D array representing data on interactions.
-     *                     Each row contains information about a specific interaction, where the third column (index 2) represents the type of interaction.
-     *                     The available types considered for income calculation are: VISITA, ESPETACULO, ALIMENTACAO, and APADRINHAMENTO.
-     *                     The method calculates and prints the total income along with the income generated from each type of interaction.
-     */
     static void printInteractionsIncomeStats(String[][] interactions) {
-        double visitIncome = utils.sumValueByCriteria(interactions, 2, "VISITA");
-        double showIncome = utils.sumValueByCriteria(interactions, 2, "ESPETACULO");
-        double feedIncome = utils.sumValueByCriteria(interactions, 2, "ALIMENTACAO");
-        double sponsorIncome = utils.sumValueByCriteria(interactions, 2, "APADRINHAMENTO");
+        double visitIncome = sumValueByCriteria(interactions, 2, "VISITA");
+        double showIncome = sumValueByCriteria(interactions, 2, "ESPETACULO");
+        double feedIncome = sumValueByCriteria(interactions, 2, "ALIMENTACAO");
+        double sponsorIncome = sumValueByCriteria(interactions, 2, "APADRINHAMENTO");
         double totalIncome = visitIncome + showIncome + feedIncome + sponsorIncome;
 
         printResultHeader("Receita total por tipo de interação");
@@ -78,23 +64,19 @@ public class CodeSavanna {
 
         System.out.printf("%-19s", "APADRINHAMENTO:");
         System.out.println("APADRINHAMENTO: " + sponsorIncome);
-        System.out.println("+----------------------------------------------------------------------+");
-    }
 
-    /**
-     * Prints statistics about different types of interactions based on the given 2D array.
-     *
-     * @param interactions A 2D array representing interactions data.
-     */
+        printResultFooter();
+    }
+    
     static void printInteractionsStats(String[][] interactions) {
-        int visitCount = utils.countValueInColumn(interactions, 2, "VISITA");
-        int showCount = utils.countValueInColumn(interactions, 2, "ESPETACULO");
-        int feedCount = utils.countValueInColumn(interactions, 2, "ALIMENTACAO");
-        int sponsorCount = utils.countValueInColumn(interactions, 2, "APADRINHAMENTO");
+        int visitCount = countValueInColumn(interactions, 2, "VISITA");
+        int showCount = countValueInColumn(interactions, 2, "ESPETACULO");
+        int feedCount = countValueInColumn(interactions, 2, "ALIMENTACAO");
+        int sponsorCount = countValueInColumn(interactions, 2, "APADRINHAMENTO");
 
         printResultHeader("Estatísticas gerais de interações");
         
-        System.out.printf("%-21s", "Total de interações: :");
+        System.out.printf("%-21s", "Total de interações:");
         System.out.println(interactions.length - 1); // Excluimos a linha com os cabeçalhos
 
         System.out.printf("%-21s", "APADRINHAMENTO:");
@@ -108,17 +90,10 @@ public class CodeSavanna {
 
         System.out.printf("%-21s", "APADRINHAMENTO:");
         System.out.println(sponsorCount);
-        System.out.println("+----------------------------------------------------------------------+");
+        
+        printResultFooter();
     }
-
-    /**
-     * Determines the most popular animal based on the number of interactions recorded.
-     *
-     * @param animals      A 2D array of strings representing the data of animals.
-     *                     Each row contains information about a specific animal, where the second column (index 1) represents the name of the animal.
-     * @param interactions A 2D array of strings representing data on interactions between animals and other entities.
-     *                     Each row contains information about a specific interaction, where the fourth column (index 3) represents the animal involved in the interaction.
-     */
+    
     public static void printMostPopularAnimal(String[][] animals, String[][] interactions) {
         int[] animalInteractions = new int[animals.length - 1]; // Salta a linha do cabeçalho
 
@@ -155,18 +130,10 @@ public class CodeSavanna {
 
         System.out.printf("%-12s", "Interações:");
         System.out.println(maxInteractions);
-        System.out.println("------------");
+
+        printResultFooter();
     }
 
-    /**
-     * Extracts an array of unique species names from a 2D array of animal information.
-     * The input array contains animal records where each row represents an animal
-     * with details such as name, type, and species.
-     *
-     * @param animals a 2D array where each row represents an animal and columns represent its details.
-     *                The third column (index 2) is expected to contain the species information.
-     * @return an array containing unique species names found in the input array.
-     */
     static String[] getSpecies(String[][] animals) {
         int uniqueSpeciesCount = 0;
         boolean uniqueSpeciesFound;
@@ -204,21 +171,6 @@ public class CodeSavanna {
         return species;
     }
 
-    /**
-     * Prints the top 3 most sponsored species based on the provided animal and interaction data.
-     * The method analyzes sponsorship interactions of animals, calculates the total sponsorship count
-     * and income for each species, and then lists the top 3 species with the highest sponsorship counts.
-     *
-     * @param animals      a 2D array where each row represents an animal and its details.
-     *                     The format for each row is expected to include at least:
-     *                     - Column 0: Animal ID
-     *                     - Column 2: Species name
-     * @param interactions a 2D array where each row represents an interaction between a sponsor
-     *                     and an animal. The format for each row is expected to include at least:
-     *                     - Column 2: Interaction type (e.g., "APADRINHAMENTO")
-     *                     - Column 3: Target animal ID
-     *                     - Column 5: Amount paid
-     */
     static void printTopSponsoredSpecies(String[][] animals, String[][] interactions) {
         String[] species = getSpecies(animals);
         int[] sponsorCount = new int[species.length];
@@ -239,9 +191,9 @@ public class CodeSavanna {
             }
         }
 
-        int[] sortedSponsorCount = utils.sortIntArrayDescending(sponsorCount);
-        String[] sortedSpecies = utils.sortStringArrayDescendingByReference(species, sponsorCount);
-        double[] sortedSpecieIncome = utils.sortDoubleArrayDescending(specieIncome);
+        int[] sortedSponsorCount = sortIntArrayDescending(sponsorCount);
+        String[] sortedSpecies = sortStringArrayDescendingByReference(species, sponsorCount);
+        double[] sortedSpecieIncome = sortDoubleArrayDescending(specieIncome);
         
         printResultHeader("Top 3 espécies mais apadrinhadas");
         
@@ -261,19 +213,11 @@ public class CodeSavanna {
             System.out.printf("%-23s", "Valor mensal total:");
             System.out.println(sortedSpecieIncome[i] + " €");
 
-            System.out.println("----------------------");
+            printResultFooter();
         }
 
     }
 
-    /**
-     * Prompts the user to input the ID of an animal and verifies its existence within the given 2D array of animals.
-     * If the provided ID is not found, the user will be repeatedly prompted until a valid ID is entered.
-     *
-     * @param animals A 2D String array representing the data of animals. Each row contains information about a specific animal,
-     *                where the first column (index 0) is assumed to store the IDs of the animals.
-     * @return The valid animal ID entered by the user.
-     */
     static String getValidAnimal(String[][] animals) {
         Scanner input = new Scanner(System.in);
         String selectedAnimal;
@@ -282,30 +226,12 @@ public class CodeSavanna {
         do {
             System.out.print("Digite o ID do animal a buscar: ");
             selectedAnimal = input.next().trim().toUpperCase();     // CHECK: Pode usar toUpperCase() ou toLowerCase()?
-            animalExists = utils.existsInMatrix(animals, 0, selectedAnimal);
+            animalExists = existsInMatrix(animals, 0, selectedAnimal);
         } while (!animalExists);
 
         return selectedAnimal;
     }
 
-    /**
-     * Filters the given interactions array to include only rows where the specified
-     * animal column matches the given animal value and the specified interaction
-     * type column matches the given interaction type value.
-     *
-     * @param interactions         A 2D String array representing the data of interactions.
-     *                             Each row contains information about a specific interaction.
-     * @param animalColumn         The index of the column in the interactions array that
-     *                             corresponds to the animal's attribute to be filtered by.
-     * @param animalValue          The value to match in the specified animal column.
-     * @param iteractionTypeColumn The index of the column in the interactions array
-     *                             that corresponds to the interaction type to be filtered by.
-     * @param interactionTypeValue The value to match in the specified interaction
-     *                             type column.
-     * @return A filtered 2D String array containing only the rows that match both
-     * the animal value in the specified column and the interaction type
-     * value in the specified column.
-     */
     public static String[][] filterByAnimalAndInteractionType(String[][] interactions, int animalColumn, String animalValue, int iteractionTypeColumn, String interactionTypeValue) {
         int count = 0;
 
@@ -328,42 +254,26 @@ public class CodeSavanna {
         return filteredMatrix;
     }
 
-    /**
-     * Displays the list of sponsors for a specific animal. The method prompts the user to select an animal,
-     * filters the interactions to find only sponsorships for that animal, and retrieves the details of each sponsor.
-     * If no sponsors are found for the selected animal, a message is displayed.
-     *
-     * @param animals      A 2D String array representing the data of animals. Each row contains information
-     *                     about a specific animal, where the first column (index 0) stores the animal ID.
-     * @param interactions A 2D String array representing data on interactions between animals and clients.
-     *                     Each row contains information about a specific interaction, where columns represent
-     *                     attributes such as interaction type, related animal ID, and associated client ID.
-     * @param clients      A 2D String array representing the data of clients. Each row contains information
-     *                     about a specific client, where the first column (index 0) stores the client ID,
-     *                     and other columns store additional client details such as name and email.
-     */
     static void printAnimalSponsors(String[][] animals, String[][] interactions, String[][] clients) {
 
         String selectedAnimal = getValidAnimal(animals);
         String[][] selectedInteractions = filterByAnimalAndInteractionType(interactions, 3, selectedAnimal, 2, "APADRINHAMENTO");
 
+        printResultHeader("Listar padrinhos de um animal");
+        
         if (selectedInteractions.length == 0) {
             System.out.println("Não há padrinhos para este animal.");
+            printResultFooter();
             return;
         }
 
-        String animalName = utils.findValueAtColumn(animals, 0, selectedAnimal, 1);
-
-        System.out.println();
-        System.out.println("+----------------------------------------------------------------------+");
-        System.out.println("|                     Listar padrinhos de um animal                    |");
-        System.out.println("+----------------------------------------------------------------------+");
+        String animalName = findValueAtColumn(animals, 0, selectedAnimal, 1);
 
         System.out.println("Lista de padrinhos para o animal " + selectedAnimal + " (" + animalName + "):");
 
         for (int i = 0; i < selectedInteractions.length; i++) {
-            String clientName = utils.findValueAtColumn(clients, 0, selectedInteractions[i][1], 1);
-            String clientEmail = utils.findValueAtColumn(clients, 0, selectedInteractions[i][1], 3);
+            String clientName = findValueAtColumn(clients, 0, selectedInteractions[i][1], 1);
+            String clientEmail = findValueAtColumn(clients, 0, selectedInteractions[i][1], 3);
 
             System.out.println();
             System.out.printf("%-25s", "Nome do cliente:");
@@ -377,31 +287,32 @@ public class CodeSavanna {
 
             System.out.printf("%-25s", "Plano de apadrinhamento:");
             System.out.println(selectedInteractions[i][4]);
-            System.out.println("------------------------");
+            
+            printResultFooter();
         }
     }
-
-    static String[][] filterByInteractionType(String[][] interactions, int iteractionTypeColumn, String interactionTypeValue) {
-        int count = 0;
-
-        for (int i = 1; i < interactions.length; i++) {
-            if (interactions[i][iteractionTypeColumn].equals(interactionTypeValue)) {
-                count++;
-            }
-        }
-
-        String[][] filteredMatrix = new String[count][interactions[0].length];
-        int filteredIndex = 0;
-
-        for (int i = 1; i < interactions.length; i++) {
-            if (interactions[i][iteractionTypeColumn].equals(interactionTypeValue)) {
-                filteredMatrix[filteredIndex] = interactions[i];
-                filteredIndex++;
-            }
-        }
-
-        return filteredMatrix;
-    }
+//
+//    static String[][] filterByInteractionType(String[][] interactions, int iteractionTypeColumn, String interactionTypeValue) {
+//        int count = 0;
+//
+//        for (int i = 1; i < interactions.length; i++) {
+//            if (interactions[i][iteractionTypeColumn].equals(interactionTypeValue)) {
+//                count++;
+//            }
+//        }
+//
+//        String[][] filteredMatrix = new String[count][interactions[0].length];
+//        int filteredIndex = 0;
+//
+//        for (int i = 1; i < interactions.length; i++) {
+//            if (interactions[i][iteractionTypeColumn].equals(interactionTypeValue)) {
+//                filteredMatrix[filteredIndex] = interactions[i];
+//                filteredIndex++;
+//            }
+//        }
+//
+//        return filteredMatrix;
+//    }
 
     private static String[] getUniqueShows(String[][] interactions, int searchColumn, String searchValue) {
         int uniqueShowsCount = 0;
@@ -510,10 +421,8 @@ public class CodeSavanna {
         String animalId = getAnimalIdFromShowName(interactions, shows[mostValuableShowIndex]);
         String[][] animal = getMostValuableAnimal(animals, animalId);
 
-        System.out.println();
-        System.out.println("+----------------------------------------------------------------------+");
-        System.out.println("|                       Espetáculo mais rentável                       |");
-        System.out.println("+----------------------------------------------------------------------+");
+        printResultHeader("Espetáculo mais rentável");
+
         System.out.printf("%-20s", "Nome do espetáculo:");
         System.out.println(shows[mostValuableShowIndex]);
 
@@ -527,14 +436,15 @@ public class CodeSavanna {
 
         System.out.printf("%-11s", "- Espécie:");
         System.out.println(animal[0][2]);
-        System.out.println("--------------------");
+        
+        printResultFooter();
     }
 
     private static int[] getExtintionAnimalsInteractions(String[][] interactions, String[][] extintionAnimals) {
 
         int[] animalInteractions = new int[extintionAnimals.length];
         for (int i = 0; i < extintionAnimals.length; i++) {
-            animalInteractions[i] = utils.countValueInColumn(interactions, 3, extintionAnimals[i][0]);
+            animalInteractions[i] = countValueInColumn(interactions, 3, extintionAnimals[i][0]);
         }
         return animalInteractions;
     }
@@ -543,19 +453,19 @@ public class CodeSavanna {
 
         double[] animalIncome = new double[extintionAnimals.length];
         for (int i = 0; i < extintionAnimals.length; i++) {
-            animalIncome[i] = utils.sumValueByCriteria(interactions, 3, extintionAnimals[i][0]);
+            animalIncome[i] = sumValueByCriteria(interactions, 3, extintionAnimals[i][0]);
         }
         return animalIncome;
     }
 
     private static void printExtintionRank(String[][] animals, String[][] interactions) {
-        String[][] extintionAnimals = utils.filterMatrix(animals, 5, "SIM");
+        String[][] extintionAnimals = filterMatrix(animals, 5, "SIM");
         int[] animalInteractions = getExtintionAnimalsInteractions(interactions, extintionAnimals);
         double[] animalIncome = getExtintionAnimalsIncomes(interactions, extintionAnimals);
 
-        int[] sortedAnimalInteractions = utils.sortIntArrayDescending(animalInteractions);
-        String[][] sortedExtintionAnimals = utils.sortStringMatrixAtColumnDescendingByReference(extintionAnimals, animalInteractions);
-        double[] sortedAnimalIncome = utils.sortDoubleArrayDescending(animalIncome);
+        int[] sortedAnimalInteractions = sortIntArrayDescending(animalInteractions);
+        String[][] sortedExtintionAnimals = sortStringMatrixAtColumnDescendingByReference(extintionAnimals, animalInteractions);
+        double[] sortedAnimalIncome = sortDoubleArrayDescending(animalIncome);
         
         printResultHeader("Ranking de animais em perigo de extinção");
         
@@ -578,7 +488,8 @@ public class CodeSavanna {
 
             System.out.printf("%-20s", "Total de receita:");
             System.out.println(sortedAnimalIncome[i] + " €");
-            System.out.println("-------------------");
+            
+            printResultFooter();
         }
     }
 
@@ -652,7 +563,7 @@ public class CodeSavanna {
 
         for (int i = 0; i < habitats.length; i++) {
 
-            String[][] habitatAnimals = utils.filterMatrix(animals, 3, habitats[i]);
+            String[][] habitatAnimals = filterMatrix(animals, 3, habitats[i]);
             int habitatInteractions = getHabitatInteractions(interactions, habitatAnimals);
             double habitatIncome = getHabitatIncome(interactions, habitatAnimals);
 
@@ -668,17 +579,11 @@ public class CodeSavanna {
 
             System.out.printf("%-19s", "Receita associada:");
             System.out.println(habitatIncome + " €");
-            System.out.println("------------------");
+            
+            printResultFooter();
         }
     }
 
-    /**
-     * Displays the admin menu with various options for administrative tasks.
-     *
-     * @param animals      A 2D String array representing the data of animals.
-     * @param clients      A 2D String array representing the data of clients.
-     * @param interactions A 2D String array representing the data of interactions.
-     */
     static void adminMenu(String[][] animals, String[][] clients, String[][] interactions) {
         int option;
 
@@ -736,13 +641,6 @@ public class CodeSavanna {
 
     }
 
-    /**
-     * Displays the client menu options for CodeSavanna.
-     *
-     * @param animals      A 2D String array representing the animal data.
-     * @param clients      A 2D String array representing the client data.
-     * @param interactions A 2D String array representing the interactions data.
-     */
     static void clientMenu(String[][] animals, String[][] clients, String[][] interactions) {
         int option;
 
@@ -781,13 +679,6 @@ public class CodeSavanna {
 
     }
 
-    /**
-     * Displays a login menu for users to select their login option (administrator or client).
-     *
-     * @param animals      A 2D String array representing the data in the 'animais' file.
-     * @param clients      A 2D String array representing the data in the 'clientes' file.
-     * @param interactions A 2D String array representing the data in the 'interacoes' file.
-     */
     static void loginMenu(String[][] animals, String[][] clients, String[][] interactions) {
         int loginOption;
 
@@ -805,12 +696,12 @@ public class CodeSavanna {
 
             switch (loginOption) {
                 case 1:
-                    if (utils.validLogin("admin")) {
+                    if (validLogin("admin")) {
                         adminMenu(animals, clients, interactions);
                     }
                     break;
                 case 2:
-                    if (utils.validLogin("client")) {
+                    if (validLogin("client")) {
                         clientMenu(animals, clients, interactions);
                     }
                     break;
@@ -829,9 +720,9 @@ public class CodeSavanna {
         String clientsFilePath = "files/clientes.csv";
         String interactionsFilePath = "files/interacoes.csv";
 
-        String[][] animals = utils.readCsv(animalsFilePath, ";");
-        String[][] clients = utils.readCsv(clientsFilePath, ";");
-        String[][] interactions = utils.readCsv(interactionsFilePath, ";");
+        String[][] animals = readCsv(animalsFilePath, ";");
+        String[][] clients = readCsv(clientsFilePath, ";");
+        String[][] interactions = readCsv(interactionsFilePath, ";");
 
         System.out.println("Bem vindo ao CodeSavanna!");
 
