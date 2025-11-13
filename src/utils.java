@@ -144,6 +144,27 @@ public class utils {
      */
     public static void printMatrix(String[][] matrix) {
 
+        int[] columnLengths = getColumnsLengths(matrix);
+
+        System.out.println();
+        printMatrixSeparator(matrix, columnLengths);
+        for (int i = 0; i < matrix.length; i++) {
+            System.out.print("| ");
+            for (int j = 0; j < matrix[0].length; j++) {
+                System.out.printf("%-" + columnLengths[j] + "s", matrix[i][j].trim());
+                System.out.print(" | ");
+            }
+            System.out.println();
+
+            if (i == 0) {
+                printMatrixSeparator(matrix, columnLengths);
+            }
+        }
+        printMatrixSeparator(matrix, columnLengths);
+        System.out.println();
+    }
+
+    private static int[] getColumnsLengths(String[][] matrix) {
         int[] columnLengths = new int[matrix[0].length];
 
         for (int item = 0; item < matrix.length; item++) {
@@ -153,18 +174,17 @@ public class utils {
                 }
             }
         }
+        return columnLengths;
+    }
 
-        System.out.println();
-        for (int i = 0; i < matrix.length; i++) {
-            System.out.print("| ");
-            // TODO: Imprimir linha para separar cabeçalho do conteúdo (+-----+-----+-----+)
-            for (int j = 0; j < matrix[0].length; j++) {
-                System.out.printf("%-" + columnLengths[j] + "s", matrix[i][j].trim());
-                if (j < matrix[0].length) {
-                    System.out.print(" | ");
-                }
+    private static void printMatrixSeparator(String[][] matrix, int[] columnLengths) {
+        System.out.print("+");
+        for (int j = 0; j < matrix[0].length; j++) {
+            System.out.print("-");
+            for (int k = 0; k < columnLengths[j]; k++) {
+                System.out.print("-");
             }
-            System.out.println();
+            System.out.print("-+");
         }
         System.out.println();
     }
@@ -261,7 +281,7 @@ public class utils {
 
         String temp;
         int refTemp;
-        
+
         for (int i = referenceArray.length - 1; i >= 0; i--) {
 
             for (int j = referenceArray.length - 1; j >= 0; j--) {
@@ -269,7 +289,7 @@ public class utils {
                     refTemp = referenceArray[j];
                     referenceArray[j] = referenceArray[i];
                     referenceArray[i] = refTemp;
-                    
+
                     temp = sortedArray[j];
                     sortedArray[j] = sortedArray[i];
                     sortedArray[i] = temp;
@@ -282,25 +302,22 @@ public class utils {
     }
 
     static String[][] filterMatrix(String[][] originalMatrix, int filterColumn, String filterValue) {
-        // TODO: Contar elementos com o valor de pesquisa
-        int count=0;
+        int count = 0;
         for (int i = 1; i < originalMatrix.length; i++) {
-            if (originalMatrix[i][filterColumn].equals(filterValue)){
+            if (originalMatrix[i][filterColumn].equals(filterValue)) {
                 count++;
             }
         }
-        // TODO: Criar nova matriz com o tamanho da contagem
         String[][] filteredMatrix = new String[count][originalMatrix[0].length];
-        
-        // TODO: Preencher a nova matriz com os valores
-        int filteredMatrixIndex=0;
+
+        int filteredMatrixIndex = 0;
         for (int i = 0; i < originalMatrix.length; i++) {
-            if (originalMatrix[i][filterColumn].equals(filterValue)){
+            if (originalMatrix[i][filterColumn].equals(filterValue)) {
                 filteredMatrix[filteredMatrixIndex] = originalMatrix[i];
                 filteredMatrixIndex++;
             }
         }
-        
+
         return filteredMatrix;
     }
 }

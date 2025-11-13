@@ -14,6 +14,7 @@ public class CodeSavanna {
         int option;
 
         do {
+            System.out.println();
             System.out.println("+----------------------------------------------------------------------+");
             System.out.println("|                     Menu Ficheiros - CodeSavanna                     |");
             System.out.println("+----------------------------------------------------------------------+");
@@ -24,19 +25,29 @@ public class CodeSavanna {
             System.out.println("+----------------------------------------------------------------------+");
 
             Scanner sc = new Scanner(System.in);
+            System.out.print("Opoção: ");
             option = sc.nextInt();
 
             switch (option) {
                 case 1:
-                    System.out.println("Listar conteúdo do ficheiro 'animais'");
+                    System.out.println();
+                    System.out.println("+----------------------------------------------------------------------+");
+                    System.out.println("|                 Listar conteúdo do ficheiro 'animais'                |");
+                    System.out.println("+----------------------------------------------------------------------+");
                     utils.printMatrix(animals);
                     break;
                 case 2:
-                    System.out.println("Listar conteúdo do ficheiro 'clientes'");
+                    System.out.println();
+                    System.out.println("+----------------------------------------------------------------------+");
+                    System.out.println("|                 Listar conteúdo do ficheiro 'clientes'               |");
+                    System.out.println("+----------------------------------------------------------------------+");
                     utils.printMatrix(clients);
                     break;
                 case 3:
-                    System.out.println("Listar conteúdo do ficheiro 'interacoes'");
+                    System.out.println();
+                    System.out.println("+----------------------------------------------------------------------+");
+                    System.out.println("|                Listar conteúdo do ficheiro 'interacoes'              |");
+                    System.out.println("+----------------------------------------------------------------------+");
                     utils.printMatrix(interactions);
                     break;
                 default:
@@ -244,7 +255,10 @@ public class CodeSavanna {
             }
         }
 
-        // TODO: Tentei fazer por funções, mas o array original era ordenado na primeira chamada
+        /* CHECK: Tentei fazer por funções, mas o array original era ordenado na primeira chamada
+         *        Criar função que 'clone' a função original antes de ordenar
+         */
+
 
         // int[] sortedSponsorCount = utils.sortDescending(sponsorCount);
         // String[] sortedSpecies = utils.sortDescendingByReference(species, sponsorCount);
@@ -315,7 +329,7 @@ public class CodeSavanna {
 
         do {
             System.out.print("Digite o ID do animal a buscar: ");
-            selectedAnimal = input.next().trim().toUpperCase();     // TODO: Pode usar toUpperCase() ou toLowerCase()?
+            selectedAnimal = input.next().trim().toUpperCase();     // CHECK: Pode usar toUpperCase() ou toLowerCase()?
             animalExists = utils.existsInMatrix(animals, 0, selectedAnimal);
         } while (!animalExists);
 
@@ -587,7 +601,9 @@ public class CodeSavanna {
         int[] animalInteractions = getExtintionAnimalsInteractions(interactions, extintionAnimals);
         double[] animalIncome = getExtintionAnimalsIncomes(interactions, extintionAnimals);
 
-        // TODO: Tentei fazer por funções, mas o array original era ordenado na primeira chamada
+        /* CHECK: Tentei fazer por funções, mas o array original era ordenado na primeira chamada
+         *        Criar função que 'clone' a função original antes de ordenar
+         */
 
         String[] extintionAnimalsTemp;
         int animalInteractionsTemp;
@@ -907,6 +923,7 @@ public class CodeSavanna {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
+        // TODO: Refazer comentários de funções
         String animalsFilePath = "files/animais.csv";
         String clientsFilePath = "files/clientes.csv";
         String interactionsFilePath = "files/interacoes.csv";
