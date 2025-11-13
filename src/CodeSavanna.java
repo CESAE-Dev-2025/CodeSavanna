@@ -1,6 +1,8 @@
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import static CodeSavannaUtils.utils.printResultHeader;
+
 public class CodeSavanna {
 
     /**
@@ -14,40 +16,28 @@ public class CodeSavanna {
         int option;
 
         do {
-            System.out.println();
-            System.out.println("+----------------------------------------------------------------------+");
-            System.out.println("|                     Menu Ficheiros - CodeSavanna                     |");
-            System.out.println("+----------------------------------------------------------------------+");
+            printResultHeader("CodeSavanna - Menu Ficheiros");
+            
             System.out.println("1 - Listar conteúdo do ficheiro 'animais'");
             System.out.println("2 - Listar conteúdo do ficheiro 'clientes'");
             System.out.println("3 - Listar conteúdo do ficheiro 'interacoes'");
             System.out.println("0 - Voltar");
-            System.out.println("+----------------------------------------------------------------------+");
 
             Scanner sc = new Scanner(System.in);
-            System.out.print("Opoção: ");
+            System.out.print("\nOpção: ");
             option = sc.nextInt();
 
             switch (option) {
                 case 1:
-                    System.out.println();
-                    System.out.println("+----------------------------------------------------------------------+");
-                    System.out.println("|                 Listar conteúdo do ficheiro 'animais'                |");
-                    System.out.println("+----------------------------------------------------------------------+");
+                    printResultHeader("Listar conteúdo do ficheiro 'animais'");
                     utils.printMatrix(animals);
                     break;
                 case 2:
-                    System.out.println();
-                    System.out.println("+----------------------------------------------------------------------+");
-                    System.out.println("|                 Listar conteúdo do ficheiro 'clientes'               |");
-                    System.out.println("+----------------------------------------------------------------------+");
+                    printResultHeader("Listar conteúdo do ficheiro 'clientes'");
                     utils.printMatrix(clients);
                     break;
                 case 3:
-                    System.out.println();
-                    System.out.println("+----------------------------------------------------------------------+");
-                    System.out.println("|                Listar conteúdo do ficheiro 'interacoes'              |");
-                    System.out.println("+----------------------------------------------------------------------+");
+                    printResultHeader("Listar conteúdo do ficheiro 'interacoes'");
                     utils.printMatrix(interactions);
                     break;
                 default:
@@ -72,10 +62,8 @@ public class CodeSavanna {
         double sponsorIncome = utils.sumValueByCriteria(interactions, 2, "APADRINHAMENTO");
         double totalIncome = visitIncome + showIncome + feedIncome + sponsorIncome;
 
-        System.out.println();
-        System.out.println("+----------------------------------------------------------------------+");
-        System.out.println("|                  Receita total por tipo de interação                 |");
-        System.out.println("+----------------------------------------------------------------------+");
+        printResultHeader("Receita total por tipo de interação");
+        
         System.out.printf("%-19s", "Total de receitas:");
         System.out.println(totalIncome);
 
@@ -104,10 +92,8 @@ public class CodeSavanna {
         int feedCount = utils.countValueInColumn(interactions, 2, "ALIMENTACAO");
         int sponsorCount = utils.countValueInColumn(interactions, 2, "APADRINHAMENTO");
 
-        System.out.println();
-        System.out.println("+----------------------------------------------------------------------+");
-        System.out.println("|                   Estatísticas gerais de interações                  |");
-        System.out.println("+----------------------------------------------------------------------+");
+        printResultHeader("Estatísticas gerais de interações");
+        
         System.out.printf("%-21s", "Total de interações: :");
         System.out.println(interactions.length - 1); // Excluimos a linha com os cabeçalhos
 
@@ -156,10 +142,8 @@ public class CodeSavanna {
             }
         }
 
-        System.out.println();
-        System.out.println("+----------------------------------------------------------------------+");
-        System.out.println("|                          Animal mais popular                         |");
-        System.out.println("+----------------------------------------------------------------------+");
+        printResultHeader("Animal mais popular");
+        
         System.out.printf("%-12s", "Nome:");
         System.out.println(animals[mostPopularIndex][1]);
 
@@ -255,59 +239,27 @@ public class CodeSavanna {
             }
         }
 
-        /* CHECK: Tentei fazer por funções, mas o array original era ordenado na primeira chamada
-         *        Criar função que 'clone' a função original antes de ordenar
-         */
-
-
-        // int[] sortedSponsorCount = utils.sortDescending(sponsorCount);
-        // String[] sortedSpecies = utils.sortDescendingByReference(species, sponsorCount);
-        // double[] sortedSpecieIncome = sortDescendingByReference(specieIncome, sponsorCount);
-
-        String speciesTemp;
-        int sponsorCountTemp;
-        double specieIncomeTemp;
-
-        for (int i = sponsorCount.length - 1; i >= 0; i--) {
-
-            for (int j = sponsorCount.length - 1; j >= 0; j--) {
-                if (i != j && sponsorCount[i] < sponsorCount[j]) {
-                    sponsorCountTemp = sponsorCount[j];
-                    sponsorCount[j] = sponsorCount[i];
-                    sponsorCount[i] = sponsorCountTemp;
-
-                    speciesTemp = species[j];
-                    species[j] = species[i];
-                    species[i] = speciesTemp;
-
-                    specieIncomeTemp = specieIncome[j];
-                    specieIncome[j] = specieIncome[i];
-                    specieIncome[i] = specieIncomeTemp;
-                }
-            }
-
-        }
-
-        System.out.println();
-        System.out.println("+----------------------------------------------------------------------+");
-        System.out.println("|                   Top 3 espécies mais apadrinhadas                   |");
-        System.out.println("+----------------------------------------------------------------------+");
-
+        int[] sortedSponsorCount = utils.sortIntArrayDescending(sponsorCount);
+        String[] sortedSpecies = utils.sortStringArrayDescendingByReference(species, sponsorCount);
+        double[] sortedSpecieIncome = utils.sortDoubleArrayDescending(specieIncome);
+        
+        printResultHeader("Top 3 espécies mais apadrinhadas");
+        
         // Imprimir o Top 3
         int topSponsoredToShow = 3;
-        if (species.length < 3) {
-            topSponsoredToShow = species.length;
+        if (sortedSpecies.length < 3) {
+            topSponsoredToShow = sortedSpecies.length;
         }
-
+        
         for (int i = 0; i < topSponsoredToShow; i++) {
             System.out.println();
-            System.out.println((i + 1) + ") " + species[i]);
+            System.out.println((i + 1) + ") " + sortedSpecies[i]);
 
             System.out.printf("%-23s", "No de apadrinhamentos:");
-            System.out.println(sponsorCount[i]);
+            System.out.println(sortedSponsorCount[i]);
 
             System.out.printf("%-23s", "Valor mensal total:");
-            System.out.println(specieIncome[i] + " €");
+            System.out.println(sortedSpecieIncome[i] + " €");
 
             System.out.println("----------------------");
         }
@@ -601,58 +553,31 @@ public class CodeSavanna {
         int[] animalInteractions = getExtintionAnimalsInteractions(interactions, extintionAnimals);
         double[] animalIncome = getExtintionAnimalsIncomes(interactions, extintionAnimals);
 
-        /* CHECK: Tentei fazer por funções, mas o array original era ordenado na primeira chamada
-         *        Criar função que 'clone' a função original antes de ordenar
-         */
-
-        String[] extintionAnimalsTemp;
-        int animalInteractionsTemp;
-        double animalIncomeTemp;
-
-        for (int i = animalIncome.length - 1; i >= 0; i--) {
-
-            for (int j = animalIncome.length - 1; j >= 0; j--) {
-                if (i != j && animalIncome[i] < animalIncome[j]) {
-                    animalIncomeTemp = animalIncome[j];
-                    animalIncome[j] = animalIncome[i];
-                    animalIncome[i] = animalIncomeTemp;
-
-                    animalInteractionsTemp = animalInteractions[j];
-                    animalInteractions[j] = animalInteractions[i];
-                    animalInteractions[i] = animalInteractionsTemp;
-
-                    extintionAnimalsTemp = extintionAnimals[j];
-                    extintionAnimals[j] = extintionAnimals[i];
-                    extintionAnimals[i] = extintionAnimalsTemp;
-                }
-            }
-
-        }
-
-        System.out.println();
-        System.out.println("+----------------------------------------------------------------------+");
-        System.out.println("|               Ranking de animais em perigo de extinção               |");
-        System.out.println("+----------------------------------------------------------------------+");
-
-        for (int i = 0; i < extintionAnimals.length; i++) {
+        int[] sortedAnimalInteractions = utils.sortIntArrayDescending(animalInteractions);
+        String[][] sortedExtintionAnimals = utils.sortStringMatrixAtColumnDescendingByReference(extintionAnimals, animalInteractions);
+        double[] sortedAnimalIncome = utils.sortDoubleArrayDescending(animalIncome);
+        
+        printResultHeader("Ranking de animais em perigo de extinção");
+        
+        for (int i = 0; i < sortedExtintionAnimals.length; i++) {
 
             System.out.println();
-            System.out.println((i + 1) + ") " + extintionAnimals[i][1]);
+            System.out.println((i + 1) + ") " + sortedExtintionAnimals[i][1]);
 
             System.out.printf("%-20s", "Espécie:");
-            System.out.println(extintionAnimals[i][2]);
+            System.out.println(sortedExtintionAnimals[i][2]);
 
             System.out.printf("%-20s", "Habitat:");
-            System.out.println(extintionAnimals[i][3]);
+            System.out.println(sortedExtintionAnimals[i][3]);
 
             System.out.printf("%-20s", "Dieta:");
-            System.out.println(extintionAnimals[i][4]);
+            System.out.println(sortedExtintionAnimals[i][4]);
 
             System.out.printf("%-20s", "Total de interação:");
-            System.out.println(animalInteractions[i]);
+            System.out.println(sortedAnimalInteractions[i]);
 
             System.out.printf("%-20s", "Total de receita:");
-            System.out.println(animalIncome[i] + " €");
+            System.out.println(sortedAnimalIncome[i] + " €");
             System.out.println("-------------------");
         }
     }
@@ -721,23 +646,9 @@ public class CodeSavanna {
     }
 
     private static void printHabitatStats(String[][] animals, String[][] interactions) {
-        /*
-        9. Estatísticas por habitat
-        Para cada habitat presente no ficheiro animais.csv:
-            • Contar quantos animais nesse habitat.
-            • Contar quantas interações totais existem com animais desse habitat.
-            • Somar o valorPago total associado aos animais desse habitat.
-        * */
         String[] habitats = getHabitats(animals);
 
-//        String[][] extintionAnimals = utils.filterMatrix(animals, 5, "SIM");
-//        int[] animalInteractions = getExtintionAnimalsInteractions(interactions, extintionAnimals);
-//        double[] animalIncome = getExtintionAnimalsIncomes(interactions, extintionAnimals);
-
-        System.out.println();
-        System.out.println("+----------------------------------------------------------------------+");
-        System.out.println("|                       Estatísticas por habitat                       |");
-        System.out.println("+----------------------------------------------------------------------+");
+        printResultHeader("Estatísticas por habitat");
 
         for (int i = 0; i < habitats.length; i++) {
 
@@ -772,10 +683,8 @@ public class CodeSavanna {
         int option;
 
         do {
-            System.out.println();
-            System.out.println("+----------------------------------------------------------------------+");
-            System.out.println("|                       Menu ADMIN - CodeSavanna                       |");
-            System.out.println("+----------------------------------------------------------------------+");
+            printResultHeader("CodeSavanna - Menu ADMIN");
+            
             System.out.println("1 - Listar conteúdo dos ficheiros");
             System.out.println("2 - Estatísticas gerais de interações");
             System.out.println("3 - Receita total por tipo de interação");
@@ -786,7 +695,6 @@ public class CodeSavanna {
             System.out.println("8 - Ranking de animais em perigo de extinção");
             System.out.println("9 - Estatísticas por habitat");
             System.out.println("0 - Voltar");
-            System.out.println("+----------------------------------------------------------------------+");
 
             Scanner sc = new Scanner(System.in);
             System.out.print("\nOpção: ");
@@ -839,17 +747,13 @@ public class CodeSavanna {
         int option;
 
         do {
-            System.out.println();
-            System.out.println("+----------------------------------------------------------------------+");
-            System.out.println("|                      Menu CLIENTE - CodeSavanna                      |");
-            System.out.println("+----------------------------------------------------------------------+");
+            printResultHeader("CodeSavanna - Menu CLIENTE");
 
             System.out.println("1 - Ver catálogo de animais por habitat");
             System.out.println("2 - Ver atividades de um animal (espetáculos e alimentações)");
             System.out.println("3 - Simular apadrinhamento de um animal");
             System.out.println("4 - Jogo: adivinha a espécie");
             System.out.println("0 - Voltar");
-            System.out.println("+----------------------------------------------------------------------+");
 
             Scanner sc = new Scanner(System.in);
             System.out.print("\nOpção: ");
@@ -888,10 +792,7 @@ public class CodeSavanna {
         int loginOption;
 
         do {
-            System.out.println();
-            System.out.println("+----------------------------------------------------------------------+");
-            System.out.println("|                          CodeSavanna - Login                         |");
-            System.out.println("+----------------------------------------------------------------------+");
+            printResultHeader("CodeSavanna - Login");
 
             System.out.println("\nSelecione uma das opções de login abaixo:");
             System.out.println("1 - Administrador");
