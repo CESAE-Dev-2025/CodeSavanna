@@ -2,16 +2,16 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import static CodeSavannaUtils.utils.*;
+import static CodeSavannaUtils.utils.printResultHeader;
 
 public class CodeSavanna {
 
-    
     static void printFileMenu(String[][] animals, String[][] clients, String[][] interactions) {
         int option;
 
         do {
             printResultHeader("CodeSavanna - Menu Ficheiros");
-            
+
             System.out.println("1 - Listar conteúdo do ficheiro 'animais'");
             System.out.println("2 - Listar conteúdo do ficheiro 'clientes'");
             System.out.println("3 - Listar conteúdo do ficheiro 'interacoes'");
@@ -49,7 +49,7 @@ public class CodeSavanna {
         double totalIncome = visitIncome + showIncome + feedIncome + sponsorIncome;
 
         printResultHeader("Receita total por tipo de interação");
-        
+
         System.out.printf("%-19s", "Total de receitas:");
         System.out.println(totalIncome);
 
@@ -67,7 +67,7 @@ public class CodeSavanna {
 
         printResultFooter();
     }
-    
+
     static void printInteractionsStats(String[][] interactions) {
         int visitCount = countValueInColumn(interactions, 2, "VISITA");
         int showCount = countValueInColumn(interactions, 2, "ESPETACULO");
@@ -75,7 +75,7 @@ public class CodeSavanna {
         int sponsorCount = countValueInColumn(interactions, 2, "APADRINHAMENTO");
 
         printResultHeader("Estatísticas gerais de interações");
-        
+
         System.out.printf("%-21s", "Total de interações:");
         System.out.println(interactions.length - 1); // Excluimos a linha com os cabeçalhos
 
@@ -90,10 +90,10 @@ public class CodeSavanna {
 
         System.out.printf("%-21s", "APADRINHAMENTO:");
         System.out.println(sponsorCount);
-        
+
         printResultFooter();
     }
-    
+
     public static void printMostPopularAnimal(String[][] animals, String[][] interactions) {
         int[] animalInteractions = new int[animals.length - 1]; // Salta a linha do cabeçalho
 
@@ -118,7 +118,7 @@ public class CodeSavanna {
         }
 
         printResultHeader("Animal mais popular");
-        
+
         System.out.printf("%-12s", "Nome:");
         System.out.println(animals[mostPopularIndex][1]);
 
@@ -194,15 +194,15 @@ public class CodeSavanna {
         int[] sortedSponsorCount = sortIntArrayDescending(sponsorCount);
         String[] sortedSpecies = sortStringArrayDescendingByReference(species, sponsorCount);
         double[] sortedSpecieIncome = sortDoubleArrayDescending(specieIncome);
-        
+
         printResultHeader("Top 3 espécies mais apadrinhadas");
-        
+
         // Imprimir o Top 3
         int topSponsoredToShow = 3;
         if (sortedSpecies.length < 3) {
             topSponsoredToShow = sortedSpecies.length;
         }
-        
+
         for (int i = 0; i < topSponsoredToShow; i++) {
             System.out.println();
             System.out.println((i + 1) + ") " + sortedSpecies[i]);
@@ -260,7 +260,7 @@ public class CodeSavanna {
         String[][] selectedInteractions = filterByAnimalAndInteractionType(interactions, 3, selectedAnimal, 2, "APADRINHAMENTO");
 
         printResultHeader("Listar padrinhos de um animal");
-        
+
         if (selectedInteractions.length == 0) {
             System.out.println("Não há padrinhos para este animal.");
             printResultFooter();
@@ -287,32 +287,10 @@ public class CodeSavanna {
 
             System.out.printf("%-25s", "Plano de apadrinhamento:");
             System.out.println(selectedInteractions[i][4]);
-            
+
             printResultFooter();
         }
     }
-//
-//    static String[][] filterByInteractionType(String[][] interactions, int iteractionTypeColumn, String interactionTypeValue) {
-//        int count = 0;
-//
-//        for (int i = 1; i < interactions.length; i++) {
-//            if (interactions[i][iteractionTypeColumn].equals(interactionTypeValue)) {
-//                count++;
-//            }
-//        }
-//
-//        String[][] filteredMatrix = new String[count][interactions[0].length];
-//        int filteredIndex = 0;
-//
-//        for (int i = 1; i < interactions.length; i++) {
-//            if (interactions[i][iteractionTypeColumn].equals(interactionTypeValue)) {
-//                filteredMatrix[filteredIndex] = interactions[i];
-//                filteredIndex++;
-//            }
-//        }
-//
-//        return filteredMatrix;
-//    }
 
     private static String[] getUniqueShows(String[][] interactions, int searchColumn, String searchValue) {
         int uniqueShowsCount = 0;
@@ -436,7 +414,7 @@ public class CodeSavanna {
 
         System.out.printf("%-11s", "- Espécie:");
         System.out.println(animal[0][2]);
-        
+
         printResultFooter();
     }
 
@@ -466,9 +444,9 @@ public class CodeSavanna {
         int[] sortedAnimalInteractions = sortIntArrayDescending(animalInteractions);
         String[][] sortedExtintionAnimals = sortStringMatrixAtColumnDescendingByReference(extintionAnimals, animalInteractions);
         double[] sortedAnimalIncome = sortDoubleArrayDescending(animalIncome);
-        
+
         printResultHeader("Ranking de animais em perigo de extinção");
-        
+
         for (int i = 0; i < sortedExtintionAnimals.length; i++) {
 
             System.out.println();
@@ -488,7 +466,7 @@ public class CodeSavanna {
 
             System.out.printf("%-20s", "Total de receita:");
             System.out.println(sortedAnimalIncome[i] + " €");
-            
+
             printResultFooter();
         }
     }
@@ -579,9 +557,13 @@ public class CodeSavanna {
 
             System.out.printf("%-19s", "Receita associada:");
             System.out.println(habitatIncome + " €");
-            
-            printResultFooter();
+
+            if (i < habitats.length - 1) {
+                System.out.println("------------------");
+            }
         }
+
+        printResultFooter();
     }
 
     static void adminMenu(String[][] animals, String[][] clients, String[][] interactions) {
@@ -589,7 +571,7 @@ public class CodeSavanna {
 
         do {
             printResultHeader("CodeSavanna - Menu ADMIN");
-            
+
             System.out.println("1 - Listar conteúdo dos ficheiros");
             System.out.println("2 - Estatísticas gerais de interações");
             System.out.println("3 - Receita total por tipo de interação");
@@ -659,7 +641,7 @@ public class CodeSavanna {
 
             switch (option) {
                 case 1:
-                    System.out.println("1 - Ver catálogo de animais por habitat");
+                    printAnimalsByHabitat(animals);
                     break;
                 case 2:
                     System.out.println("2 - Ver atividades de um animal (espetáculos e alimentações)");
@@ -677,6 +659,27 @@ public class CodeSavanna {
 
         } while (option != 0);
 
+    }
+
+    private static void printAnimalsByHabitat(String[][] animals) {
+        String[] habitats = getHabitats(animals);
+
+        printResultHeader("Catálogo de animais por habitat");
+
+        System.out.println();
+        for (int i = 0; i < habitats.length; i++) {
+
+            String[][] habitatAnimals = filterMatrix(animals, 3, habitats[i]);
+
+            printResultSubHeader(habitats[i]);
+
+            for (int j = 0; j < habitatAnimals.length; j++) {
+                System.out.println("- " + habitatAnimals[j][1] + " (" + habitatAnimals[j][2] + ")");
+            }
+            System.out.println();
+        }
+
+        printResultFooter();
     }
 
     static void loginMenu(String[][] animals, String[][] clients, String[][] interactions) {
@@ -724,6 +727,8 @@ public class CodeSavanna {
         String[][] clients = readCsv(clientsFilePath, ";");
         String[][] interactions = readCsv(interactionsFilePath, ";");
 
+        // TODO: Imprimir banner de início
+        System.out.println("\n\n\n");
         System.out.println("Bem vindo ao CodeSavanna!");
 
         loginMenu(animals, clients, interactions);

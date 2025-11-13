@@ -5,14 +5,14 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class utils {
-    
+
     public static void printResultHeader(String resultTitle) {
         int availableSpace = 70;
         int titleLenght = resultTitle.length();
         int spaceBefore = (availableSpace - titleLenght) / 2;
         int spaceAfter = availableSpace - spaceBefore - titleLenght;
-        
-        
+
+
         System.out.println();
         System.out.println("+----------------------------------------------------------------------+");
         System.out.print("|");
@@ -23,8 +23,24 @@ public class utils {
         for (int i = 0; i < spaceAfter; i++) {
             System.out.print(" ");
         }
-        System.out.println("|");        
+        System.out.println("|");
         System.out.println("+----------------------------------------------------------------------+");
+    }
+
+    public static void printResultSubHeader(String subHeader) {
+        int availableSpace = 70;
+        int subHeaderLenght = subHeader.length();
+        int spaceBefore = (availableSpace - subHeaderLenght) / 2;
+        int spaceAfter = availableSpace - spaceBefore - subHeaderLenght;
+
+        for (int i = 0; i < spaceBefore; i++) {
+            System.out.print("-");
+        }
+        System.out.print(" " + subHeader + " ");
+        for (int i = 0; i < spaceAfter; i++) {
+            System.out.print("-");
+        }
+        System.out.println();
     }
 
     public static void printResultFooter() {
@@ -59,7 +75,6 @@ public class utils {
         return isValid;
     }
 
-
     public static String[][] readCsvHeader(String filePath, int columns, String separator) throws FileNotFoundException {
         Scanner file = new Scanner(new File(filePath));
 
@@ -74,7 +89,6 @@ public class utils {
 
         return matriz;
     }
-
 
     public static int getFileLinesCount(String filePath) throws FileNotFoundException {
 
@@ -91,7 +105,6 @@ public class utils {
         return lineCount;
     }
 
-
     public static int getFileColumns(String filePath, String separator) throws FileNotFoundException {
 
         Scanner in = new Scanner(new File(filePath));
@@ -106,7 +119,6 @@ public class utils {
 
         return columnCount;
     }
-
 
     public static String[][] readCsv(String filePath, String separator) throws FileNotFoundException {
 
@@ -130,7 +142,6 @@ public class utils {
 
         return matrix;
     }
-
 
     public static void printMatrix(String[][] matrix) {
 
@@ -179,7 +190,6 @@ public class utils {
         System.out.println();
     }
 
-
     public static int countValueInColumn(String[][] matrix, int column, String searchValue) {
 
         int count = 0;
@@ -191,7 +201,6 @@ public class utils {
         return count;
     }
 
-
     public static double sumValueByCriteria(String[][] matrix, int column, String searchValue) {
         double sum = 0;
         for (int i = 1; i < matrix.length; i++) {
@@ -201,7 +210,6 @@ public class utils {
         }
         return sum;
     }
-
 
     public static boolean existsInMatrix(String[][] matrix, int column, String value) {
 
@@ -331,7 +339,6 @@ public class utils {
         return arrayClone;
     }
 
-
     public static double[] sortDoubleArrayDescending(double[] arrayToSort) {
         double[] sortedArray = cloneArrayDouble(arrayToSort);
 
@@ -370,5 +377,5 @@ public class utils {
 
         return filteredMatrix;
     }
-    
+
 }
