@@ -217,7 +217,7 @@ public class CodeSavanna {
      *                The third column (index 2) is expected to contain the species information.
      * @return an array containing unique species names found in the input array.
      */
-    private static String[] getSpecies(String[][] animals) {
+    static String[] getSpecies(String[][] animals) {
         int uniqueSpeciesCount = 0;
         boolean uniqueSpeciesFound;
         for (int i = 1; i < animals.length; i++) {
@@ -628,7 +628,6 @@ public class CodeSavanna {
     }
 
     private static void printExtintionRank(String[][] animals, String[][] interactions) {
-        // TODO: Adicionar Ranking de animais em perigo de extinção
         String[][] extintionAnimals = utils.filterMatrix(animals, 5, "SIM");
         int[] animalInteractions = getExtintionAnimalsInteractions(interactions, extintionAnimals);
         double[] animalIncome = getExtintionAnimalsIncomes(interactions, extintionAnimals);
@@ -663,19 +662,12 @@ public class CodeSavanna {
         System.out.println("+----------------------------------------------------------------------+");
         System.out.println("|               Ranking de animais em perigo de extinção               |");
         System.out.println("+----------------------------------------------------------------------+");
-/*
-        8. Ranking de animais em perigo de extinção
-            Usar os animais em que perigoExtincao = "SIM".
-            Para cada um:
-            • Contar o número total de interações associadas (todas as linhas em interacoes.csv com o seu idAnimal).
-            • Somar o dinheiro total associado a esse animal (valorPago de todas as interações).
-            Listar os animais em perigo de extinção ordenados por dinheiro total (do que gera mais para o que gera menos).
-        * */
+
         for (int i = 0; i < extintionAnimals.length; i++) {
 
             System.out.println();
             System.out.println((i + 1) + ") " + extintionAnimals[i][1]);
-            
+
             System.out.printf("%-20s", "Espécie:");
             System.out.println(extintionAnimals[i][2]);
 
@@ -691,6 +683,111 @@ public class CodeSavanna {
             System.out.printf("%-20s", "Total de receita:");
             System.out.println(animalIncome[i] + " €");
             System.out.println("-------------------");
+        }
+    }
+
+
+    private static String[] getHabitats(String[][] animals) {
+        int uniqueHabitatsCount = 0;
+        boolean uniquehabitatsFound;
+        for (int i = 1; i < animals.length; i++) {
+            uniquehabitatsFound = true;
+            for (int j = 1; j < i; j++) {
+                if (i != j && animals[i][3].equals(animals[j][3])) {
+                    uniquehabitatsFound = false;
+                    j = i;
+                }
+            }
+            if (uniquehabitatsFound) {
+                uniqueHabitatsCount++;
+            }
+
+        }
+
+        String[] habitats = new String[uniqueHabitatsCount];
+        int habitatsIndex = 0;
+        for (int i = 1; i < animals.length; i++) {
+            uniquehabitatsFound = true;
+            for (int j = 1; j < i; j++) {
+                if (i != j && animals[i][3].equals(animals[j][3])) {
+                    uniquehabitatsFound = false;
+                    j = i;
+                }
+            }
+            if (uniquehabitatsFound) {
+                habitats[habitatsIndex] = animals[i][3];
+                habitatsIndex++;
+            }
+
+        }
+
+        return habitats;
+    }
+
+    private static int getHabitatInteractions(String[][] interactions, String[][] habitatAnimals) {
+        int interactionCount = 0;
+
+        for (int i = 0; i < habitatAnimals.length; i++) {
+            for (int j = 1; j < interactions.length; j++) {
+                if (interactions[j][3].equals(habitatAnimals[i][0])) {
+                    interactionCount++;
+                }
+            }
+        }
+        return interactionCount;
+    }
+
+    private static double getHabitatIncome(String[][] interactions, String[][] habitatAnimals) {
+        double interactionIncome = 0;
+
+        for (int i = 0; i < habitatAnimals.length; i++) {
+            for (int j = 1; j < interactions.length; j++) {
+                if (interactions[j][3].equals(habitatAnimals[i][0])) {
+                    interactionIncome += Double.parseDouble(interactions[j][5]);
+                }
+            }
+        }
+        return interactionIncome;
+    }
+
+    private static void printHabitatStats(String[][] animals, String[][] interactions) {
+        /*
+        9. Estatísticas por habitat
+        Para cada habitat presente no ficheiro animais.csv:
+            • Contar quantos animais nesse habitat.
+            • Contar quantas interações totais existem com animais desse habitat.
+            • Somar o valorPago total associado aos animais desse habitat.
+        * */
+        String[] habitats = getHabitats(animals);
+
+//        String[][] extintionAnimals = utils.filterMatrix(animals, 5, "SIM");
+//        int[] animalInteractions = getExtintionAnimalsInteractions(interactions, extintionAnimals);
+//        double[] animalIncome = getExtintionAnimalsIncomes(interactions, extintionAnimals);
+
+        System.out.println();
+        System.out.println("+----------------------------------------------------------------------+");
+        System.out.println("|                       Estatísticas por habitat                       |");
+        System.out.println("+----------------------------------------------------------------------+");
+
+        for (int i = 0; i < habitats.length; i++) {
+
+            String[][] habitatAnimals = utils.filterMatrix(animals, 3, habitats[i]);
+            int habitatInteractions = getHabitatInteractions(interactions, habitatAnimals);
+            double habitatIncome = getHabitatIncome(interactions, habitatAnimals);
+
+            System.out.println();
+            System.out.printf("%-19s", "Habitat:");
+            System.out.println(habitats[i]);
+
+            System.out.printf("%-19s", "Nº de animais:");
+            System.out.println(habitatAnimals.length);
+
+            System.out.printf("%-19s", "Nº de interações:");
+            System.out.println(habitatInteractions);
+
+            System.out.printf("%-19s", "Receita associada:");
+            System.out.println(habitatIncome + " €");
+            System.out.println("------------------");
         }
     }
 
@@ -751,7 +848,7 @@ public class CodeSavanna {
                     printExtintionRank(animals, interactions);
                     break;
                 case 9:
-                    System.out.println("9 - Estatísticas por habitat");
+                    printHabitatStats(animals, interactions);
                     break;
                 default:
                     System.out.println("0 - Voltar");
