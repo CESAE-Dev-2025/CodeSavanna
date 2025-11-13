@@ -47,6 +47,45 @@ public class utils {
         System.out.println("+----------------------------------------------------------------------+");
     }
 
+    public static void printExitBoard() {
+        char copyrightSymbol = '\u00A9';
+        System.out.println();
+        System.out.println();
+        System.out.println("                     ,---.           ,---.");
+        System.out.println("                    / /\"`.\\.--\"\"\"--./,'\"\\ \\");
+        System.out.println("                    \\ \\    _       _    / /");
+        System.out.println("                     `./  / __   __ \\  \\,'");
+        System.out.println("                      /    /_O)_(_O\\    \\");
+        System.out.println("                      |  .-'  ___  `-.  |");
+        System.out.println("                   .--|       \\_/       |--.");
+        System.out.println("                 ,'    \\   \\   |   /   /    `.");
+        System.out.println("                /       `.  `--^--'  ,'       \\");
+        System.out.println("             .-\"\"\"\"\"-.    `--.___.--'     .-\"\"\"\"\"-.");
+        System.out.println(".-----------/         \\------------------/         \\--------------.");
+        System.out.println("| .---------\\         /----------------- \\         /------------. |");
+        System.out.println("| |          `-`--`--'                    `--'--'-'             | |");
+        System.out.println("| |                                                             | |");
+        System.out.println("| |             CESAE Digital - Software Developer              | |");
+        System.out.println("| |                                                             | |");
+        System.out.println("| |             Leandro de Assis Gabriel                        | |");
+        System.out.println("| |                                                             | |");
+        System.out.println("| |             Formador: Vitor Santos                          | |");
+        System.out.println("| |                                                             | |");
+        System.out.println("| |             Copyright " + copyrightSymbol + " 2025                                | |");
+        System.out.println("| |                                                             | |");
+        System.out.println("| |_____________________________________________________________| |");
+        System.out.println("|_________________________________________________________________|");
+        System.out.println("                 )__________|__|__________(");
+        System.out.println("                |            ||            |");
+        System.out.println("                |____________||____________|");
+        System.out.println("                  ),-----.(      ),-----.(");
+        System.out.println("                ,'   ==.   \\    /  .==    `.");
+        System.out.println("               /            )  (            \\");
+        System.out.println("               `==========='    `==========='  hjw");
+        System.out.println();
+        System.out.println();
+    }
+
     public static boolean validLogin(String role) {
         Scanner sc = new Scanner(System.in);
         String[][] users = {

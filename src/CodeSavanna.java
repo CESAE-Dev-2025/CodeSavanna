@@ -224,7 +224,7 @@ public class CodeSavanna {
         boolean animalExists;
 
         do {
-            System.out.print("Digite o ID do animal a buscar: ");
+            System.out.print("Digite o ID do animal: ");
             selectedAnimal = input.next().trim().toUpperCase();     // CHECK: Pode usar toUpperCase() ou toLowerCase()?
             animalExists = existsInMatrix(animals, 0, selectedAnimal);
         } while (!animalExists);
@@ -644,7 +644,7 @@ public class CodeSavanna {
                     printAnimalsByHabitat(animals);
                     break;
                 case 2:
-                    System.out.println("2 - Ver atividades de um animal (espetáculos e alimentações)");
+                    printAnimalsActivities(animals, interactions);
                     break;
                 case 3:
                     System.out.println("3 - Simular apadrinhamento de um animal");
@@ -661,7 +661,36 @@ public class CodeSavanna {
 
     }
 
-    private static void printAnimalsByHabitat(String[][] animals) {
+    static void printAnimalsActivities(String[][] animals, String[][] interactions) {
+        String selectedAnimal = getValidAnimal(animals);
+        String[][] seledtedAnimalInfo = filterMatrix(animals, 0, selectedAnimal);
+        String[][] selectedAnimalShows = filterByAnimalAndInteractionType(interactions, 3, selectedAnimal, 2, "ESPETACULO");
+        String[][] selectedAnimalFeed = filterByAnimalAndInteractionType(interactions, 3, selectedAnimal, 2, "ALIMENTACAO");
+
+        printResultHeader("Atividades do animal " + seledtedAnimalInfo[0][1] + " (" + seledtedAnimalInfo[0][2] + ")");
+
+        System.out.println("ESPETÁCULOS:");
+        if (selectedAnimalShows.length == 0) {
+            System.out.println("- Não houve interações deste tipo para este animal.");
+        } else if (selectedAnimalShows.length == 1) {
+            System.out.println("- " + selectedAnimalShows[0][4] + " (1 vez)");
+        } else {
+            System.out.println("- " + selectedAnimalShows[0][4] + " (" + selectedAnimalShows.length + " vezes)");
+        }
+
+        System.out.println("\nALIMENTAÇÃO:");
+        if (selectedAnimalFeed.length == 0) {
+            System.out.println("- Não houve interações deste tipo para este animal.");
+        } else if (selectedAnimalFeed.length == 1) {
+            System.out.println("- " + selectedAnimalFeed[0][4] + " (1 vez)");
+        } else {
+            System.out.println("- " + selectedAnimalFeed[0][4] + " (" + selectedAnimalFeed.length + " vezes)");
+        }
+
+        printResultFooter();
+    }
+
+    static void printAnimalsByHabitat(String[][] animals) {
         String[] habitats = getHabitats(animals);
 
         printResultHeader("Catálogo de animais por habitat");
@@ -731,6 +760,9 @@ public class CodeSavanna {
         System.out.println("\n\n\n");
         System.out.println("Bem vindo ao CodeSavanna!");
 
-        loginMenu(animals, clients, interactions);
+        // loginMenu(animals, clients, interactions);
+        clientMenu(animals, clients, interactions);
+
+        printExitBoard();
     }
 }
