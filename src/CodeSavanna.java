@@ -256,14 +256,14 @@ public class CodeSavanna {
 
     /**
      * Prints the top 3 most sponsored species based on the provided animal and interaction data.
-     * The method analyzes sponsorship interactions of animals, calculates the total sponsorship count 
+     * The method analyzes sponsorship interactions of animals, calculates the total sponsorship count
      * and income for each species, and then lists the top 3 species with the highest sponsorship counts.
      *
-     * @param animals a 2D array where each row represents an animal and its details. 
-     *                The format for each row is expected to include at least:
-     *                - Column 0: Animal ID
-     *                - Column 2: Species name
-     * @param interactions a 2D array where each row represents an interaction between a sponsor 
+     * @param animals      a 2D array where each row represents an animal and its details.
+     *                     The format for each row is expected to include at least:
+     *                     - Column 0: Animal ID
+     *                     - Column 2: Species name
+     * @param interactions a 2D array where each row represents an interaction between a sponsor
      *                     and an animal. The format for each row is expected to include at least:
      *                     - Column 2: Interaction type (e.g., "APADRINHAMENTO")
      *                     - Column 3: Target animal ID
@@ -318,7 +318,7 @@ public class CodeSavanna {
             }
 
         }
-        
+
         System.out.println();
         System.out.println("+----------------------------------------------------------------------+");
         System.out.println("|                   Top 3 espécies mais apadrinhadas                   |");
@@ -329,7 +329,7 @@ public class CodeSavanna {
         if (species.length < 3) {
             topSponsoredToShow = species.length;
         }
-        
+
         for (int i = 0; i < topSponsoredToShow; i++) {
             System.out.println();
             System.out.println((i + 1) + ") " + species[i]);
@@ -482,19 +482,23 @@ public class CodeSavanna {
         return filteredMatrix;
     }
 
-    private static String[] getUniqueShows(String[][] interactions, int i, String espetaculo) {
+    private static String[] getUniqueShows(String[][] interactions, int searchColumn, String searchValue) {
         int uniqueShowsCount = 0;
         boolean uniqueShowsFound;
         for (int i = 1; i < interactions.length; i++) {
-            uniqueShowsFound = true;
-            for (int j = 1; j < i; j++) {
-                if (i != j && interactions[i][2].equals(interactions[j][2])) {
-                    uniqueShowsFound = false;
-                    j = i;
+            
+            if (interactions[i][searchColumn].equals(searchValue)) {
+
+                uniqueShowsFound = true;
+                for (int j = 1; j < i; j++) {
+                    if (i != j && interactions[i][4].equals(interactions[j][4])) {
+                        uniqueShowsFound = false;
+                        j = i;
+                    }
                 }
-            }
-            if (uniqueShowsFound) {
-                uniqueShowsCount++;
+                if (uniqueShowsFound) {
+                    uniqueShowsCount++;
+                }
             }
 
         }
@@ -502,18 +506,21 @@ public class CodeSavanna {
         String[] shows = new String[uniqueShowsCount];
         int showsIndex = 0;
         for (int i = 1; i < interactions.length; i++) {
-            uniqueShowsFound = true;
-            for (int j = 1; j < i; j++) {
-                if (i != j && interactions[i][2].equals(interactions[j][2])) {
-                    uniqueShowsFound = false;
-                    j = i;
-                }
-            }
-            if (uniqueShowsFound) {
-                shows[showsIndex] = interactions[i][2];
-                showsIndex++;
-            }
 
+            if (interactions[i][searchColumn].equals(searchValue)) {
+                uniqueShowsFound = true;
+                for (int j = 1; j < i; j++) {
+                    if (i != j && interactions[i][4].equals(interactions[j][4])) {
+                        uniqueShowsFound = false;
+                        j = i;
+                    }
+                }
+                if (uniqueShowsFound) {
+                    shows[showsIndex] = interactions[i][4];
+                    showsIndex++;
+                }
+
+            }
         }
 
         return shows;
@@ -523,31 +530,56 @@ public class CodeSavanna {
         double[] showsIncome = new double[shows.length];
 
         for (int i = 0; i < shows.length; i++) {
-            
+
             for (int j = 1; j < interactions.length; j++) {
-                if (shows[i].equals(interactions[j][4])){
+                if (shows[i].equals(interactions[j][4])) {
                     showsIncome[i] += Double.parseDouble(interactions[j][5]);
                 }
             }
-            
+
         }
-        
+
         return showsIncome;
     }
 
     private static int getMostValuableShowIndex(double[] showsIncome) {
-        
+
         int greaterIndex = 0;
         double greater = showsIncome[greaterIndex];
 
         for (int i = 1; i < showsIncome.length; i++) {
-            if (showsIncome[i] > greater){
+            if (showsIncome[i] > greater) {
                 greater = showsIncome[i];
                 greaterIndex = i;
             }
         }
-        
+
         return greaterIndex;
+    }
+
+    static String[][] getMostValuableAnimal(String[][] animals, String animalId) {
+        String[][] valuableAnimal = new String[1][animals[0].length];
+
+        for (int i = 1; i < animals.length; i++) {
+            if (animals[i][0].equals(animalId)) {
+                valuableAnimal[0] = animals[i];
+            }
+        }
+
+        return valuableAnimal;
+    }
+
+    private static String getAnimalIdFromShowName(String[][] interactions, String show) {
+        String animalId = "";
+
+        for (int i = 1; i < interactions.length; i++) {
+            if (interactions[i][4].equals(show)) {
+                animalId = interactions[i][3];
+                i = interactions.length;
+            }
+        }
+
+        return animalId;
     }
 
     static void printMostRantableShow(String[][] interactions, String[][] animals) {
@@ -562,31 +594,35 @@ public class CodeSavanna {
                 o Animal principal (nome e espécie), usando idAnimal e animais.csv
         * */
 
-        String[] shows = getUniqueShows(interactions,2,"ESPETACULO");
-        
+        String[] shows = getUniqueShows(interactions, 2, "ESPETACULO");
+
         // CHECK: Para cada espetáculo (nomeEvento, col 4), somar valorPago (col 5)
         double[] showsIncome = getShowsIncome(interactions, shows);
-        
+
         // CHECK: Localizar índice do espetáculo com maior receita
         int mostValuableShowIndex = getMostValuableShowIndex(showsIncome);
-        
+
         // TODO: para o evento de maior receita, localizar informações do animal (nome, col 1; e espécie, col 2)
-//        String[][] animal = getMostValuableAnimal(animals, mostValuableShowIndex);
-        
+        String animalId = getAnimalIdFromShowName(interactions, shows[mostValuableShowIndex]);
+        String[][] animal = getMostValuableAnimal(animals, animalId);
+
         System.out.println();
         System.out.println("+----------------------------------------------------------------------+");
         System.out.println("|                       Espetáculo mais rentável                       |");
         System.out.println("+----------------------------------------------------------------------+");
         System.out.printf("%-20s", "Nome do espetáculo:");
-//        System.out.println(animals[mostPopularIndex][1]);
+        System.out.println(shows[mostValuableShowIndex]);
 
         System.out.printf("%-20s", "Receita total:");
-//        System.out.println(animals[mostPopularIndex][2]);
+        System.out.println(showsIncome[mostValuableShowIndex] + " €");
 
         System.out.printf("%-20s", "Animal principal:");
-        System.out.printf("%-12s", " - Nome:");
-        System.out.printf("%-12s", " - Espécie:");
-//        System.out.println(maxInteractions);
+        System.out.println();
+        System.out.printf("%-11s", "- Nome:");
+        System.out.println(animal[0][1]);
+
+        System.out.printf("%-11s", "- Espécie:");
+        System.out.println(animal[0][2]);
         System.out.println("--------------------");
     }
 
