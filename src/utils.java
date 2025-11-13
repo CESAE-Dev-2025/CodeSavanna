@@ -226,13 +226,58 @@ public class utils {
     }
 
     static String findValueAtColumn(String[][] matrix, int searchColumn, String searchValue, int responseColumn) {
-        
+
         for (int i = 0; i < matrix.length; i++) {
             if (matrix[i][searchColumn].equals(searchValue)) {
                 return matrix[i][responseColumn];
             }
         }
-        
+
         return "";
+    }
+
+    static int[] sortDescending(int[] arrayToSort) {
+
+        int[] sortedArray = arrayToSort;
+
+        int temp;
+        for (int i = sortedArray.length - 1; i >= 0; i--) {
+
+            for (int j = sortedArray.length - 1; j >= 0; j--) {
+                if (i != j && sortedArray[i] < sortedArray[j]) {
+                    temp = sortedArray[j];
+                    sortedArray[j] = sortedArray[i];
+                    sortedArray[i] = temp;
+                }
+            }
+
+        }
+
+        return sortedArray;
+    }
+
+    public static String[] sortDescendingByReference(String[] arrayToSort, int[] referenceArray) {
+        String[] sortedArray = arrayToSort;
+
+        String temp;
+        int refTemp;
+        
+        for (int i = referenceArray.length - 1; i >= 0; i--) {
+
+            for (int j = referenceArray.length - 1; j >= 0; j--) {
+                if (i != j && referenceArray[i] < referenceArray[j]) {
+                    refTemp = referenceArray[j];
+                    referenceArray[j] = referenceArray[i];
+                    referenceArray[i] = refTemp;
+                    
+                    temp = sortedArray[j];
+                    sortedArray[j] = sortedArray[i];
+                    sortedArray[i] = temp;
+                }
+            }
+
+        }
+
+        return sortedArray;
     }
 }

@@ -208,42 +208,143 @@ public class CodeSavanna {
         System.out.println("------------");
     }
 
-    private static String[][] groupBySpecies(String[][] animals, String[][] interactions) {
-        // TODO: Agrupar por espécie
-        // TODO: Contar nr apadrinhamentos 
-        // TODO: Somar receitas por apadrinhamentos
-        // TODO: Ordenar matriz resultante pela contagem de apadrinhamentos
-        return animals;
+    /**
+     * Extracts an array of unique species names from a 2D array of animal information.
+     * The input array contains animal records where each row represents an animal
+     * with details such as name, type, and species.
+     *
+     * @param animals a 2D array where each row represents an animal and columns represent its details.
+     *                The third column (index 2) is expected to contain the species information.
+     * @return an array containing unique species names found in the input array.
+     */
+    private static String[] getSpecies(String[][] animals) {
+        int uniqueSpeciesCount = 0;
+        boolean uniqueSpeciesFound;
+        for (int i = 1; i < animals.length; i++) {
+            uniqueSpeciesFound = true;
+            for (int j = 1; j < i; j++) {
+                if (i != j && animals[i][2].equals(animals[j][2])) {
+                    uniqueSpeciesFound = false;
+                    j = i;
+                }
+            }
+            if (uniqueSpeciesFound) {
+                uniqueSpeciesCount++;
+            }
+
+        }
+
+        String[] species = new String[uniqueSpeciesCount];
+        int speciesIndex = 0;
+        for (int i = 1; i < animals.length; i++) {
+            uniqueSpeciesFound = true;
+            for (int j = 1; j < i; j++) {
+                if (i != j && animals[i][2].equals(animals[j][2])) {
+                    uniqueSpeciesFound = false;
+                    j = i;
+                }
+            }
+            if (uniqueSpeciesFound) {
+                species[speciesIndex] = animals[i][2];
+                speciesIndex++;
+            }
+
+        }
+
+        return species;
     }
 
+    /**
+     * Prints the top 3 most sponsored species based on the provided animal and interaction data.
+     * The method analyzes sponsorship interactions of animals, calculates the total sponsorship count 
+     * and income for each species, and then lists the top 3 species with the highest sponsorship counts.
+     *
+     * @param animals a 2D array where each row represents an animal and its details. 
+     *                The format for each row is expected to include at least:
+     *                - Column 0: Animal ID
+     *                - Column 2: Species name
+     * @param interactions a 2D array where each row represents an interaction between a sponsor 
+     *                     and an animal. The format for each row is expected to include at least:
+     *                     - Column 2: Interaction type (e.g., "APADRINHAMENTO")
+     *                     - Column 3: Target animal ID
+     *                     - Column 5: Amount paid
+     */
     static void printTopSponsoredSpecies(String[][] animals, String[][] interactions) {
-        /*
-         * Para cada espécie, somar:
-         *         o número de apadrinhamentos
-         *         o valor mensal total (soma de valorPago de APADRINHAMENTO)
-         *
-         * Imprimir o Top 3
-         * */
+        String[] species = getSpecies(animals);
+        int[] sponsorCount = new int[species.length];
+        double[] specieIncome = new double[species.length];
 
-        String[][] species = groupBySpecies(animals, interactions);
+        for (int i = 0; i < species.length; i++) {
+            // Para cada espécie, buscar animais
+            for (int j = 1; j < animals.length; j++) {
+                if (animals[j][2].equals(species[i])) {
+                    // Para cada animal da espécie, buscar interações do tipo 'APADRINHAMENTO'
+                    String[][] currentAnimalInteractions = filterByAnimalAndSponsor(interactions, 3, animals[j][0], 2, "APADRINHAMENTO");
+                    for (int k = 0; k < currentAnimalInteractions.length; k++) {
+                        //Para cada interação do tipo 'APADRINHAMENTO' de cada animal da espécie, acumular valorPago e contar padrinhos
+                        specieIncome[i] += Double.parseDouble(currentAnimalInteractions[k][5]);
+                        sponsorCount[i]++;
+                    }
+                }
+            }
+        }
 
+        // TODO: Tentei fazer por funções, mas o array original era ordenado na primeira chamada
+
+        // int[] sortedSponsorCount = utils.sortDescending(sponsorCount);
+        // String[] sortedSpecies = utils.sortDescendingByReference(species, sponsorCount);
+        // double[] sortedSpecieIncome = sortDescendingByReference(specieIncome, sponsorCount);
+
+        String speciesTemp;
+        int sponsorCountTemp;
+        double specieIncomeTemp;
+
+        for (int i = sponsorCount.length - 1; i >= 0; i--) {
+
+            for (int j = sponsorCount.length - 1; j >= 0; j--) {
+                if (i != j && sponsorCount[i] < sponsorCount[j]) {
+                    sponsorCountTemp = sponsorCount[j];
+                    sponsorCount[j] = sponsorCount[i];
+                    sponsorCount[i] = sponsorCountTemp;
+
+                    speciesTemp = species[j];
+                    species[j] = species[i];
+                    species[i] = speciesTemp;
+
+                    specieIncomeTemp = specieIncome[j];
+                    specieIncome[j] = specieIncome[i];
+                    specieIncome[i] = specieIncomeTemp;
+                }
+            }
+
+        }
+        
         System.out.println();
         System.out.println("+----------------------------------------------------------------------+");
         System.out.println("|                   Top 3 espécies mais apadrinhadas                   |");
         System.out.println("+----------------------------------------------------------------------+");
 
-        for (int i = 0; i < species.length; i++) {
-            System.out.println("1) " + species[i][0]);
+        // Imprimir o Top 3
+        int topSponsoredToShow = 3;
+        if (species.length < 3) {
+            topSponsoredToShow = species.length;
+        }
+        
+        for (int i = 0; i < topSponsoredToShow; i++) {
+            System.out.println();
+            System.out.println((i + 1) + ") " + species[i]);
 
             System.out.printf("%-23s", "No de apadrinhamentos:");
-            System.out.println(species[i][1]); // sponsorCount
+            System.out.println(sponsorCount[i]);
 
             System.out.printf("%-23s", "Valor mensal total:");
-            System.out.println(species[i][2] + " €"); // monthIncome
+            System.out.println(specieIncome[i] + " €");
+
+            System.out.println("----------------------");
         }
 
-        System.out.println("+----------------------------------------------------------------------+");
     }
+
 
     /**
      * Prompts the user to input the ID of an animal and verifies its existence within the given 2D array of animals.
@@ -268,22 +369,22 @@ public class CodeSavanna {
     }
 
     /**
-     * Filters the given interactions array to include only rows where the specified 
-     * animal column matches the given animal value and the specified interaction 
+     * Filters the given interactions array to include only rows where the specified
+     * animal column matches the given animal value and the specified interaction
      * type column matches the given interaction type value.
      *
-     * @param interactions A 2D String array representing the data of interactions. 
-     *                     Each row contains information about a specific interaction.
-     * @param animalColumn The index of the column in the interactions array that 
-     *                     corresponds to the animal's attribute to be filtered by.
-     * @param animalValue  The value to match in the specified animal column.
-     * @param iteractionTypeColumn The index of the column in the interactions array 
+     * @param interactions         A 2D String array representing the data of interactions.
+     *                             Each row contains information about a specific interaction.
+     * @param animalColumn         The index of the column in the interactions array that
+     *                             corresponds to the animal's attribute to be filtered by.
+     * @param animalValue          The value to match in the specified animal column.
+     * @param iteractionTypeColumn The index of the column in the interactions array
      *                             that corresponds to the interaction type to be filtered by.
-     * @param interactionTypeValue The value to match in the specified interaction 
+     * @param interactionTypeValue The value to match in the specified interaction
      *                             type column.
-     * @return A filtered 2D String array containing only the rows that match both 
-     *         the animal value in the specified column and the interaction type 
-     *         value in the specified column.
+     * @return A filtered 2D String array containing only the rows that match both
+     * the animal value in the specified column and the interaction type
+     * value in the specified column.
      */
     public static String[][] filterByAnimalAndSponsor(String[][] interactions, int animalColumn, String animalValue, int iteractionTypeColumn, String interactionTypeValue) {
         int count = 0;
@@ -405,7 +506,6 @@ public class CodeSavanna {
                     printMostPopularAnimal(animals, interactions);
                     break;
                 case 5:
-                    System.out.println("5 - Top 3 espécies com mais apadrinhamentos");
                     printTopSponsoredSpecies(animals, interactions);
                     break;
                 case 6:
