@@ -280,4 +280,27 @@ public class utils {
 
         return sortedArray;
     }
+
+    static String[][] filterMatrix(String[][] originalMatrix, int filterColumn, String filterValue) {
+        // TODO: Contar elementos com o valor de pesquisa
+        int count=0;
+        for (int i = 1; i < originalMatrix.length; i++) {
+            if (originalMatrix[i][filterColumn].equals(filterValue)){
+                count++;
+            }
+        }
+        // TODO: Criar nova matriz com o tamanho da contagem
+        String[][] filteredMatrix = new String[count][originalMatrix[0].length];
+        
+        // TODO: Preencher a nova matriz com os valores
+        int filteredMatrixIndex=0;
+        for (int i = 0; i < originalMatrix.length; i++) {
+            if (originalMatrix[i][filterColumn].equals(filterValue)){
+                filteredMatrix[filteredMatrixIndex] = originalMatrix[i];
+                filteredMatrixIndex++;
+            }
+        }
+        
+        return filteredMatrix;
+    }
 }

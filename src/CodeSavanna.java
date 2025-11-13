@@ -486,7 +486,7 @@ public class CodeSavanna {
         int uniqueShowsCount = 0;
         boolean uniqueShowsFound;
         for (int i = 1; i < interactions.length; i++) {
-            
+
             if (interactions[i][searchColumn].equals(searchValue)) {
 
                 uniqueShowsFound = true;
@@ -583,26 +583,9 @@ public class CodeSavanna {
     }
 
     static void printMostRantableShow(String[][] interactions, String[][] animals) {
-        /*
-        7. Espetáculo mais rentável
-        Apenas considerar as linhas com tipoInteracao = ESPETACULO.
-            • Para cada nomeEvento, somar valorPago.
-            • Determinar o espetáculo com maior receita total.
-            • Imprimir:
-                o Nome do espetáculo
-                o Receita total
-                o Animal principal (nome e espécie), usando idAnimal e animais.csv
-        * */
-
         String[] shows = getUniqueShows(interactions, 2, "ESPETACULO");
-
-        // CHECK: Para cada espetáculo (nomeEvento, col 4), somar valorPago (col 5)
         double[] showsIncome = getShowsIncome(interactions, shows);
-
-        // CHECK: Localizar índice do espetáculo com maior receita
         int mostValuableShowIndex = getMostValuableShowIndex(showsIncome);
-
-        // TODO: para o evento de maior receita, localizar informações do animal (nome, col 1; e espécie, col 2)
         String animalId = getAnimalIdFromShowName(interactions, shows[mostValuableShowIndex]);
         String[][] animal = getMostValuableAnimal(animals, animalId);
 
@@ -626,41 +609,89 @@ public class CodeSavanna {
         System.out.println("--------------------");
     }
 
-    private static String[] getEvents(String[][] interactions) {
-        int uniqueEventsCount = 0;
-        boolean uniqueEventsFound;
-        for (int i = 1; i < interactions.length; i++) {
-            uniqueEventsFound = true;
-            for (int j = 1; j < i; j++) {
-                if (i != j && interactions[i][2].equals(interactions[j][2])) {
-                    uniqueEventsFound = false;
-                    j = i;
+    private static int[] getExtintionAnimalsInteractions(String[][] interactions, String[][] extintionAnimals) {
+
+        int[] animalInteractions = new int[extintionAnimals.length];
+        for (int i = 0; i < extintionAnimals.length; i++) {
+            animalInteractions[i] = utils.countValueInColumn(interactions, 3, extintionAnimals[i][0]);
+        }
+        return animalInteractions;
+    }
+
+    private static double[] getExtintionAnimalsIncomes(String[][] interactions, String[][] extintionAnimals) {
+
+        double[] animalIncome = new double[extintionAnimals.length];
+        for (int i = 0; i < extintionAnimals.length; i++) {
+            animalIncome[i] = utils.sumValueByCriteria(interactions, 3, extintionAnimals[i][0]);
+        }
+        return animalIncome;
+    }
+
+    private static void printExtintionRank(String[][] animals, String[][] interactions) {
+        // TODO: Adicionar Ranking de animais em perigo de extinção
+        String[][] extintionAnimals = utils.filterMatrix(animals, 5, "SIM");
+        int[] animalInteractions = getExtintionAnimalsInteractions(interactions, extintionAnimals);
+        double[] animalIncome = getExtintionAnimalsIncomes(interactions, extintionAnimals);
+
+        // TODO: Tentei fazer por funções, mas o array original era ordenado na primeira chamada
+
+        String[] extintionAnimalsTemp;
+        int animalInteractionsTemp;
+        double animalIncomeTemp;
+
+        for (int i = animalIncome.length - 1; i >= 0; i--) {
+
+            for (int j = animalIncome.length - 1; j >= 0; j--) {
+                if (i != j && animalIncome[i] < animalIncome[j]) {
+                    animalIncomeTemp = animalIncome[j];
+                    animalIncome[j] = animalIncome[i];
+                    animalIncome[i] = animalIncomeTemp;
+
+                    animalInteractionsTemp = animalInteractions[j];
+                    animalInteractions[j] = animalInteractions[i];
+                    animalInteractions[i] = animalInteractionsTemp;
+
+                    extintionAnimalsTemp = extintionAnimals[j];
+                    extintionAnimals[j] = extintionAnimals[i];
+                    extintionAnimals[i] = extintionAnimalsTemp;
                 }
-            }
-            if (uniqueEventsFound) {
-                uniqueEventsCount++;
             }
 
         }
 
-        String[] events = new String[uniqueEventsCount];
-        int speciesIndex = 0;
-        for (int i = 1; i < interactions.length; i++) {
-            uniqueEventsFound = true;
-            for (int j = 1; j < i; j++) {
-                if (i != j && interactions[i][2].equals(interactions[j][2])) {
-                    uniqueEventsFound = false;
-                    j = i;
-                }
-            }
-            if (uniqueEventsFound) {
-                events[speciesIndex] = interactions[i][2];
-                speciesIndex++;
-            }
+        System.out.println();
+        System.out.println("+----------------------------------------------------------------------+");
+        System.out.println("|               Ranking de animais em perigo de extinção               |");
+        System.out.println("+----------------------------------------------------------------------+");
+/*
+        8. Ranking de animais em perigo de extinção
+            Usar os animais em que perigoExtincao = "SIM".
+            Para cada um:
+            • Contar o número total de interações associadas (todas as linhas em interacoes.csv com o seu idAnimal).
+            • Somar o dinheiro total associado a esse animal (valorPago de todas as interações).
+            Listar os animais em perigo de extinção ordenados por dinheiro total (do que gera mais para o que gera menos).
+        * */
+        for (int i = 0; i < extintionAnimals.length; i++) {
 
+            System.out.println();
+            System.out.println((i + 1) + ") " + extintionAnimals[i][1]);
+            
+            System.out.printf("%-20s", "Espécie:");
+            System.out.println(extintionAnimals[i][2]);
+
+            System.out.printf("%-20s", "Habitat:");
+            System.out.println(extintionAnimals[i][3]);
+
+            System.out.printf("%-20s", "Dieta:");
+            System.out.println(extintionAnimals[i][4]);
+
+            System.out.printf("%-20s", "Total de interação:");
+            System.out.println(animalInteractions[i]);
+
+            System.out.printf("%-20s", "Total de receita:");
+            System.out.println(animalIncome[i] + " €");
+            System.out.println("-------------------");
         }
-
-        return events;
     }
 
     /**
@@ -714,11 +745,10 @@ public class CodeSavanna {
                     printAnimalSponsors(animals, interactions, clients);
                     break;
                 case 7:
-                    System.out.println("7 - Espetáculo mais rentável");
                     printMostRantableShow(interactions, animals);
                     break;
                 case 8:
-                    System.out.println("8 - Ranking de animais em perigo de extinção");
+                    printExtintionRank(animals, interactions);
                     break;
                 case 9:
                     System.out.println("9 - Estatísticas por habitat");
