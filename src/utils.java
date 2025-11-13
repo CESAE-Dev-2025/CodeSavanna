@@ -256,9 +256,17 @@ public class utils {
         return "";
     }
 
-    static int[] sortDescending(int[] arrayToSort) {
+    private static int[] cloneArrayInt(int[] arrayToClone) {
+        int[] arrayClone = new int[arrayToClone.length];
+        for (int i = 0; i < arrayClone.length; i++) {
+            arrayClone[i] = arrayToClone[i];
+        }
+        return arrayClone;
+    }
 
-        int[] sortedArray = arrayToSort;
+    static int[] sortIntArrayDescending(int[] arrayToSort) {
+
+        int[] sortedArray = cloneArrayInt(arrayToSort);
 
         int temp;
         for (int i = sortedArray.length - 1; i >= 0; i--) {
@@ -276,20 +284,93 @@ public class utils {
         return sortedArray;
     }
 
-    public static String[] sortDescendingByReference(String[] arrayToSort, int[] referenceArray) {
-        String[] sortedArray = arrayToSort;
+    private static String[] cloneArrayString(String[] arrayToClone) {
+        String[] arrayClone = new String[arrayToClone.length];
+        for (int i = 0; i < arrayClone.length; i++) {
+            arrayClone[i] = arrayToClone[i];
+        }
+        return arrayClone;
+    }
+
+    public static String[] sortStringArrayDescendingByReference(String[] arrayToSort, int[] referenceArray) {
+        String[] sortedArray = cloneArrayString(arrayToSort);
+        int[] referenceArrayClone = cloneArrayInt(referenceArray);
 
         String temp;
         int refTemp;
 
-        for (int i = referenceArray.length - 1; i >= 0; i--) {
+        for (int i = referenceArrayClone.length - 1; i >= 0; i--) {
 
-            for (int j = referenceArray.length - 1; j >= 0; j--) {
-                if (i != j && referenceArray[i] < referenceArray[j]) {
-                    refTemp = referenceArray[j];
-                    referenceArray[j] = referenceArray[i];
-                    referenceArray[i] = refTemp;
+            for (int j = referenceArrayClone.length - 1; j >= 0; j--) {
+                if (i != j && referenceArrayClone[i] < referenceArrayClone[j]) {
+                    refTemp = referenceArrayClone[j];
+                    referenceArrayClone[j] = referenceArrayClone[i];
+                    referenceArrayClone[i] = refTemp;
 
+                    temp = sortedArray[j];
+                    sortedArray[j] = sortedArray[i];
+                    sortedArray[i] = temp;
+                }
+            }
+
+        }
+
+        return sortedArray;
+    }
+
+    private static String[][] cloneMatrixString(String[][] matrixToClone) {
+        String[][] matrixClone = new String[matrixToClone.length][matrixToClone[0].length];
+        for (int i = 0; i < matrixClone.length; i++) {
+            for (int j = 0; j < matrixToClone[0].length; j++) {
+                matrixClone[i][j] = matrixToClone[i][j];
+            }
+        }
+        return matrixClone;
+    }
+
+    public static String[][] sortStringMatrixAtColumnDescendingByReference(String[][] matrixToSort, int[] referenceArray) {
+        String[][] sortedMatrix = cloneMatrixString(matrixToSort);
+        int[] referenceArrayClone = cloneArrayInt(referenceArray);
+
+        String[] temp;
+        int refTemp;
+
+        for (int i = referenceArrayClone.length - 1; i >= 0; i--) {
+
+            for (int j = referenceArrayClone.length - 1; j >= 0; j--) {
+                if (i != j && referenceArrayClone[i] < referenceArrayClone[j]) {
+                    refTemp = referenceArrayClone[j];
+                    referenceArrayClone[j] = referenceArrayClone[i];
+                    referenceArrayClone[i] = refTemp;
+
+                    temp = sortedMatrix[j];
+                    sortedMatrix[j] = sortedMatrix[i];
+                    sortedMatrix[i] = temp;
+                }
+            }
+
+        }
+
+        return sortedMatrix;
+    }
+
+    private static double[] cloneArrayDouble(double[] arrayToClone) {
+        double[] arrayClone = new double[arrayToClone.length];
+        for (int i = 0; i < arrayClone.length; i++) {
+            arrayClone[i] = arrayToClone[i];
+        }
+        return arrayClone;
+    }
+
+
+    public static double[] sortDoubleArrayDescending(double[] arrayToSort) {
+        double[] sortedArray = cloneArrayDouble(arrayToSort);
+
+        double temp;
+        for (int i = sortedArray.length - 1; i >= 0; i--) {
+
+            for (int j = sortedArray.length - 1; j >= 0; j--) {
+                if (i != j && sortedArray[i] < sortedArray[j]) {
                     temp = sortedArray[j];
                     sortedArray[j] = sortedArray[i];
                     sortedArray[i] = temp;
