@@ -13,7 +13,7 @@ public class arrayUtils {
     }
 
     public static boolean validLogin(String role) {
-        Scanner sc = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         String[][] users = {
                 {"admin", "admin", "code"},
                 {"admin", "chefe", "!password?456"},
@@ -24,10 +24,10 @@ public class arrayUtils {
         boolean isValid = false;
 
         System.out.print("\nUsername: ");
-        username = sc.next().trim();
+        username = input.next().trim();
 
         System.out.print("Password: ");
-        password = sc.next().trim();
+        password = input.next().trim();
 
         for (int i = 0; i < users.length; i++) {
             if (users[i][0].equals(role) && users[i][1].equals(username) && users[i][2].equals(password)) {

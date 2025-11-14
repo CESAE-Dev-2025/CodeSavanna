@@ -1,15 +1,15 @@
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import static CodeSavannaUtils.arrayUtils.*;
 import static CodeSavannaUtils.coreUtils.*;
 import static CodeSavannaUtils.fileUtils.*;
+import static CodeSavannaUtils.arrayUtils.*;
 import static CodeSavannaUtils.printUtils.*;
 
 public class CodeSavanna {
 
     static void printFileMenu(String[][] animals, String[][] clients, String[][] interactions) {
-        Scanner sc = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         String option;
 
         do {
@@ -21,7 +21,7 @@ public class CodeSavanna {
             System.out.println("0 - Voltar");
 
             System.out.print("\nOpção: ");
-            option = sc.next();
+            option = input.next();
 
             switch (option) {
                 case "1":
@@ -317,7 +317,7 @@ public class CodeSavanna {
     }
 
     static void adminMenu(String[][] animals, String[][] clients, String[][] interactions) {
-        Scanner sc = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         String option;
 
         do {
@@ -335,7 +335,7 @@ public class CodeSavanna {
             System.out.println("0 - Voltar");
 
             System.out.print("\nOpção: ");
-            option = sc.next();
+            option = input.next();
 
             switch (option) {
                 case "1":
@@ -417,7 +417,7 @@ public class CodeSavanna {
         String selectedAnimalId = getValidAnimal(animals);
         String[][] seledtedAnimalInfo = filterMatrix(animals, 0, selectedAnimalId);
 
-        double sponsorAmount = getValidDouble("Digite o valor do patrocínio desejado: ");
+        double sponsorAmount = getValidSponsorAmount("Digite o valor do patrocínio desejado: ");
         String sponsorTier = getSponsorTier(sponsorAmount);
 
         printResultHeader("Apadrinhamento de um animal");
@@ -479,7 +479,7 @@ public class CodeSavanna {
     }
 
     static void clientMenu(String[][] animals, String[][] clients, String[][] interactions) {
-        Scanner sc = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         String option;
 
         do {
@@ -492,7 +492,7 @@ public class CodeSavanna {
             System.out.println("0 - Voltar");
 
             System.out.print("\nOpção: ");
-            option = sc.next();
+            option = input.next();
 
             switch (option) {
                 case "1":
@@ -519,7 +519,7 @@ public class CodeSavanna {
     }
 
     static void loginMenu(String[][] animals, String[][] clients, String[][] interactions) {
-        Scanner sc = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         String loginOption;
 
         do {
@@ -531,7 +531,7 @@ public class CodeSavanna {
             System.out.println("0 - Sair");
 
             System.out.print("\nOpção: ");
-            loginOption = sc.next();
+            loginOption = input.next();
 
             switch (loginOption) {
                 case "1":
@@ -558,7 +558,6 @@ public class CodeSavanna {
 
     public static void main(String[] args) throws FileNotFoundException {
         // TODO: Refazer comentários de funções
-        // TODO: Rever validação de inputs
         String animalsFilePath = "files/animais.csv";
         String clientsFilePath = "files/clientes.csv";
         String interactionsFilePath = "files/interacoes.csv";

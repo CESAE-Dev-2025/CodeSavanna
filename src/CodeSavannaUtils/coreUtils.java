@@ -114,21 +114,21 @@ public class coreUtils {
         return userInput;
     }
 
-    public static double getValidDouble(String message) {
+    public static double getValidSponsorAmount(String message) {
         Scanner input = new Scanner(System.in);
         double userInput;
-        boolean validString = true;
+        boolean validDouble = true;
 
         do {
             System.out.print(message);
             userInput = input.nextDouble();
 
             if (userInput < 10) {
-                validString = false;
+                validDouble = false;
                 System.out.println("O valor mínimo de apadrinhamento é de 10.00 €");
             }
 
-        } while (!validString);
+        } while (!validDouble);
 
         return userInput;
     }
