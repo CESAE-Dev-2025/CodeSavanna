@@ -695,7 +695,6 @@ public class CodeSavanna {
                     printHabitatStats(animals, interactions);
                     break;
                 case 0:
-                    // System.out.println("0 - Voltar");
                     break;
                 default:
                     System.out.println("Opção inválida!");
@@ -735,7 +734,6 @@ public class CodeSavanna {
                     playSpecieGuess(animals);
                     break;
                 case 0:
-//                    System.out.println("0 - Voltar");
                     break;
                 default:
                     System.out.println("Opção inválida!");
@@ -746,36 +744,67 @@ public class CodeSavanna {
 
     }
 
+    static String getExtintionRiskMessage(String[] animal) {
+        boolean isAtExtintionRisk = animal[5].equals("SIM");
+        String extintionRiskMessage;
+        if (isAtExtintionRisk) {
+            extintionRiskMessage = "Está em perigo de extinção";
+        } else {
+            extintionRiskMessage = "Não está em perigo de extinção";
+        }
+        return extintionRiskMessage;
+    }
+
+    static boolean isGuessed(String specieGuess, String specie, int guessCount) {
+        boolean guessed;
+        guessed = specieGuess.equalsIgnoreCase(specie);
+
+        if (guessed) {
+            System.out.println("\nParabéns! Descobriste a espécie!");
+            System.out.println("Precisaste de " + guessCount + " tentativas.");
+        } else {
+            System.out.println("\nResposta incorreta.");
+            System.out.print("Deseja tentar outra vez? (S/N) ");
+        }
+        return guessed;
+    }
+
     private static void playSpecieGuess(String[][] animals) {
         Scanner input = new Scanner(System.in);
-        String[] animal = getRamdomItem(animals);
 
         printResultHeader("Jogo: adivinha a espécie");
-        printResultSubHeader("Pistas");
-        System.out.println("PISTA 1 (habitat): " + animal[3]);
-        System.out.println("PISTA 2 (dieta): " + animal[4]);
-        System.out.println("PISTA 3 (habitat): " + animal[5]);
-
-        int guessCount = 0;
-        boolean guessed;
-        String keepTrying = "";
+        
+        String keepPlaying;
         do {
-            guessCount++;
-            String specieGuess = getValidString("\nQual a espécie? ");
-            guessed = specieGuess.equalsIgnoreCase(animal[2]);
+            String[] animal = getRamdomItem(animals);
+            String extintionRiskMessage = getExtintionRiskMessage(animal);
 
-            if (guessed) {
-                System.out.println("\nParabéns! Descobriste a espécie!");
-                System.out.println("Precisaste de " + guessCount + " tentativas.");
-                System.out.print("Deseja jogar outra vez? (S/N) ");
-            } else {
-                System.out.println("\nResposta incorreta.");
-                System.out.print("Deseja tentar outra vez? (S/N) ");
-            }
-            keepTrying = input.next().trim().toUpperCase();
+            printResultSubHeader("Pistas");
+            System.out.printf("%-19s", "PISTA 1 (habitat):");
+            System.out.println(animal[3]);
+            
+            System.out.printf("%-19s", "PISTA 2 (dieta): É");
+            System.out.println(animal[4]);
+            
+            System.out.printf("%-19s", "PISTA 3 (risco):");
+            System.out.println(extintionRiskMessage);
 
-        } while (!guessed || keepTrying.equals("N"));
+            int guessCount = 0;
+            boolean guessed;
+            String keepTrying;
+            do {
+                guessCount++;
+                String specieGuess = getValidString("\nQual a espécie? ");
+                guessed = isGuessed(specieGuess, animal[2], guessCount);
+                keepTrying = input.next().trim().toUpperCase();
+                
+            } while (!guessed && keepTrying.equalsIgnoreCase("S"));
 
+            System.out.print("\nDeseja jogar outra vez? (S/N) ");
+            keepPlaying = input.next();
+            
+        } while (keepPlaying.equalsIgnoreCase("S"));
+        
         printResultFooter();
     }
 
@@ -921,14 +950,5 @@ public class CodeSavanna {
         loginMenu(animals, clients, interactions);
 
         printExitBoard();
-    }
-
-    private static void printWelcomeArt() {
-        System.out.println("\n\n\n");
-        System.out.println("        ___          _      __                                    ");
-        System.out.println("       / __\\___   __| | ___/ _\\ __ ___   ____ _ _ __  _ __   __ _ ");
-        System.out.println("      / /  / _ \\ / _` |/ _ \\ \\ / _` \\ \\ / / _` | '_ \\| '_ \\ / _` |");
-        System.out.println("     / /__| (_) | (_| |  __/\\ \\ (_| |\\ V / (_| | | | | | | | (_| |");
-        System.out.println("     \\____/\\___/ \\__,_|\\___\\__/\\__,_| \\_/ \\__,_|_| |_|_| |_|\\__,_|");
     }
 }

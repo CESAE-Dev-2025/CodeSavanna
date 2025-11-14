@@ -7,6 +7,16 @@ import java.util.Scanner;
 
 public class utils {
     // TODO: Procurar funções que possam ser unidas em 1 mais genérica
+
+    public static void printWelcomeArt() {
+        System.out.println("\n\n\n");
+        System.out.println("        ___          _      __                                    ");
+        System.out.println("       / __\\___   __| | ___/ _\\ __ ___   ____ _ _ __  _ __   __ _ ");
+        System.out.println("      / /  / _ \\ / _` |/ _ \\ \\ / _` \\ \\ / / _` | '_ \\| '_ \\ / _` |");
+        System.out.println("     / /__| (_) | (_| |  __/\\ \\ (_| |\\ V / (_| | | | | | | | (_| |");
+        System.out.println("     \\____/\\___/ \\__,_|\\___\\__/\\__,_| \\_/ \\__,_|_| |_|_| |_|\\__,_|");
+    }
+    
     public static void printResultHeader(String resultTitle) {
         int availableSpace = 70;
         int titleLenght = resultTitle.length();
