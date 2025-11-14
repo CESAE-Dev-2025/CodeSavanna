@@ -821,6 +821,17 @@ public class CodeSavanna {
 
     }
 
+    private static void printIteractionStats(String listTitle, String[][] animalInteractions) {
+        System.out.println(listTitle);
+        if (animalInteractions.length == 0) {
+            System.out.println("- Não houve interações deste tipo para este animal.");
+        } else if (animalInteractions.length == 1) {
+            System.out.println("- " + animalInteractions[0][4] + " (1 vez)");
+        } else {
+            System.out.println("- " + animalInteractions[0][4] + " (" + animalInteractions.length + " vezes)");
+        }
+    }
+
     static void printAnimalsActivities(String[][] animals, String[][] interactions) {
         String selectedAnimal = getValidAnimal(animals);
         String[][] seledtedAnimalInfo = filterMatrix(animals, 0, selectedAnimal);
@@ -829,26 +840,8 @@ public class CodeSavanna {
 
         printResultHeader("Atividades do animal " + seledtedAnimalInfo[0][1] + " (" + seledtedAnimalInfo[0][2] + ")");
 
-        // TODO: Evitar texto nos println abaixo (ESPETÁCULOS e ALIMENTAÇÃO)
-        // TODO: Buscar prpoblemas semelhantes pelo programa
-        // TODO: Criar função para imprimir resultados
-        System.out.println("ESPETÁCULOS:");
-        if (selectedAnimalShows.length == 0) {
-            System.out.println("- Não houve interações deste tipo para este animal.");
-        } else if (selectedAnimalShows.length == 1) {
-            System.out.println("- " + selectedAnimalShows[0][4] + " (1 vez)");
-        } else {
-            System.out.println("- " + selectedAnimalShows[0][4] + " (" + selectedAnimalShows.length + " vezes)");
-        }
-
-        System.out.println("\nALIMENTAÇÃO:");
-        if (selectedAnimalFeed.length == 0) {
-            System.out.println("- Não houve interações deste tipo para este animal.");
-        } else if (selectedAnimalFeed.length == 1) {
-            System.out.println("- " + selectedAnimalFeed[0][4] + " (1 vez)");
-        } else {
-            System.out.println("- " + selectedAnimalFeed[0][4] + " (" + selectedAnimalFeed.length + " vezes)");
-        }
+        printIteractionStats("ESPETÁCULOS:", selectedAnimalShows);
+        printIteractionStats("ALIMENTAÇÃO:", selectedAnimalFeed);
 
         printResultFooter();
     }
@@ -923,12 +916,19 @@ public class CodeSavanna {
         String[][] clients = readCsv(clientsFilePath, ";");
         String[][] interactions = readCsv(interactionsFilePath, ";");
 
-        // TODO: Imprimir banner de início
-        System.out.println("\n\n\n");
-        System.out.println("Bem vindo ao CodeSavanna!");
+        printWelcomeArt();
 
         loginMenu(animals, clients, interactions);
 
         printExitBoard();
+    }
+
+    private static void printWelcomeArt() {
+        System.out.println("\n\n\n");
+        System.out.println("        ___          _      __                                    ");
+        System.out.println("       / __\\___   __| | ___/ _\\ __ ___   ____ _ _ __  _ __   __ _ ");
+        System.out.println("      / /  / _ \\ / _` |/ _ \\ \\ / _` \\ \\ / / _` | '_ \\| '_ \\ / _` |");
+        System.out.println("     / /__| (_) | (_| |  __/\\ \\ (_| |\\ V / (_| | | | | | | | (_| |");
+        System.out.println("     \\____/\\___/ \\__,_|\\___\\__/\\__,_| \\_/ \\__,_|_| |_|_| |_|\\__,_|");
     }
 }

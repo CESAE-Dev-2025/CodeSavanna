@@ -69,6 +69,7 @@ public class utils {
         System.out.println("| |             CESAE Digital - Software Developer              | |");
         System.out.println("| |                                                             | |");
         System.out.println("| |             Leandro de Assis Gabriel                        | |");
+        System.out.println("| |             Github: https://github.com/lassisg              | |");
         System.out.println("| |                                                             | |");
         System.out.println("| |             Formador: Vitor Santos                          | |");
         System.out.println("| |                                                             | |");
