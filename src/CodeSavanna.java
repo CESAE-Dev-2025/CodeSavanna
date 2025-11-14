@@ -410,7 +410,7 @@ public class CodeSavanna {
         printResultFooter();
     }
 
-    static void sponsorSimulation(String[][] animals, String[][] clients, String[][] interactions) {
+    static void sponsorSimulation(String[][] animals) {
         String clientName = getValidString("Digite seu nome: ");
         String clientEmail = getValidEmail("Digite seu email: ");
 
@@ -478,7 +478,7 @@ public class CodeSavanna {
         printResultFooter();
     }
 
-    static void clientMenu(String[][] animals, String[][] clients, String[][] interactions) {
+    static void clientMenu(String[][] animals, String[][] interactions) {
         Scanner input = new Scanner(System.in);
         String option;
 
@@ -502,7 +502,7 @@ public class CodeSavanna {
                     printAnimalsActivities(animals, interactions);
                     break;
                 case "3":
-                    sponsorSimulation(animals, clients, interactions);
+                    sponsorSimulation(animals);
                     break;
                 case "4":
                     playSpecieGuess(animals);
@@ -541,7 +541,7 @@ public class CodeSavanna {
                     break;
                 case "2":
                     if (validLogin("client")) {
-                        clientMenu(animals, clients, interactions);
+                        clientMenu(animals, interactions);
                     }
                     break;
                 case "0":
@@ -557,7 +557,6 @@ public class CodeSavanna {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        // TODO: Refazer comentários de funções
         String animalsFilePath = "files/animais.csv";
         String clientsFilePath = "files/clientes.csv";
         String interactionsFilePath = "files/interacoes.csv";
