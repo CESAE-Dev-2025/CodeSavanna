@@ -8,30 +8,30 @@ public class fileUtils {
 
     public static int getFileLinesCount(String filePath) throws FileNotFoundException {
 
-        Scanner in = new Scanner(new File(filePath));
+        Scanner input = new Scanner(new File(filePath));
         int lineCount = 0;
 
-        while (in.hasNextLine()) {
+        while (input.hasNextLine()) {
             lineCount++;
-            in.nextLine();
+            input.nextLine();
         }
 
-        in.close();
+        input.close();
 
         return lineCount;
     }
 
     public static int getFileColumns(String filePath, String separator) throws FileNotFoundException {
 
-        Scanner in = new Scanner(new File(filePath));
+        Scanner input = new Scanner(new File(filePath));
         int columnCount = 0;
 
-        if (in.hasNextLine()) {
-            String currentLine = in.nextLine();
+        if (input.hasNextLine()) {
+            String currentLine = input.nextLine();
             columnCount = currentLine.split(separator).length;
         }
 
-        in.close();
+        input.close();
 
         return columnCount;
     }
@@ -43,18 +43,18 @@ public class fileUtils {
         int columns = getFileColumns(filePath, separator);
 
         String[][] matrix = new String[lines][columns];
-        Scanner file = new Scanner(new File(filePath));
+        Scanner input = new Scanner(new File(filePath));
 
         int rowIndex = 0;
-        while (file.hasNextLine()) {
-            currentLine = file.nextLine().split(separator);
+        while (input.hasNextLine()) {
+            currentLine = input.nextLine().split(separator);
             for (int coluna = 0; coluna < matrix[0].length; coluna++) {
                 matrix[rowIndex][coluna] = currentLine[coluna];
             }
             rowIndex++;
         }
 
-        file.close();
+        input.close();
 
         return matrix;
     }
