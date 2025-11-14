@@ -34,8 +34,11 @@ public class CodeSavanna {
                     printResultHeader("Listar conteúdo do ficheiro 'interacoes'");
                     printMatrix(interactions);
                     break;
+                case 0:
+                    //System.out.println("0 - Voltar");
+                    break;
                 default:
-                    System.out.println("0 - Voltar");
+                    System.out.println("Opção inválida!");
                     break;
             }
         } while (option != 0);
@@ -691,8 +694,11 @@ public class CodeSavanna {
                 case 9:
                     printHabitatStats(animals, interactions);
                     break;
+                case 0:
+                    // System.out.println("0 - Voltar");
+                    break;
                 default:
-                    System.out.println("0 - Voltar");
+                    System.out.println("Opção inválida!");
                     break;
             }
         } while (option != 0);
@@ -728,8 +734,11 @@ public class CodeSavanna {
                 case 4:
                     System.out.println("4 - Jogo: adivinha a espécie");
                     break;
+                case 0:
+//                    System.out.println("0 - Voltar");
+                    break;
                 default:
-                    System.out.println("0 - Voltar");
+                    System.out.println("Opção inválida!");
                     break;
             }
 
@@ -787,6 +796,9 @@ public class CodeSavanna {
 
         printResultHeader("Atividades do animal " + seledtedAnimalInfo[0][1] + " (" + seledtedAnimalInfo[0][2] + ")");
 
+        // TODO: Evitar texto nos println abaixo (ESPETÁCULOS e ALIMENTAÇÃO)
+        // TODO: Buscar prpoblemas semelhantes pelo programa
+        // TODO: Criar função para imprimir resultados
         System.out.println("ESPETÁCULOS:");
         if (selectedAnimalShows.length == 0) {
             System.out.println("- Não houve interações deste tipo para este animal.");
@@ -855,8 +867,11 @@ public class CodeSavanna {
                         clientMenu(animals, clients, interactions);
                     }
                     break;
+                case 0:
+                    System.out.println("Obrigado. Tenha um ótimo dia.");
+                    break;
                 default:
-                    System.out.println("0 - Sair");
+                    System.out.println("Opção inválida!");
                     break;
             }
 
