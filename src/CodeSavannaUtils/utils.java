@@ -6,8 +6,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class utils {
-
-    // TODO: Remover funções não utilizadas
     // TODO: Procurar funções que possam ser unidas em 1 mais genérica
     public static void printResultHeader(String resultTitle) {
         int availableSpace = 70;
@@ -128,21 +126,6 @@ public class utils {
         }
         
         return isValid;
-    }
-
-    public static String[][] readCsvHeader(String filePath, int columns, String separator) throws FileNotFoundException {
-        Scanner file = new Scanner(new File(filePath));
-
-        String[][] matriz = new String[1][columns];
-        String[] linha = file.nextLine().split(separator);
-
-        for (int coluna = 0; coluna < matriz[0].length; coluna++) {
-            matriz[0][coluna] = linha[coluna];
-        }
-
-        file.close();
-
-        return matriz;
     }
 
     public static int getFileLinesCount(String filePath) throws FileNotFoundException {
