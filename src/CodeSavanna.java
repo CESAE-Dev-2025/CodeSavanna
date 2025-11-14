@@ -1,7 +1,7 @@
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import static CodeSavannaUtils.utils.*;
+import static CodeSavannaUtils.arrayUtils.*;
 import static CodeSavannaUtils.coreUtils.*;
 import static CodeSavannaUtils.fileUtils.*;
 import static CodeSavannaUtils.printUtils.*;

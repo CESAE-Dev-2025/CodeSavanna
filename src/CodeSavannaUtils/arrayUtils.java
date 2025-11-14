@@ -1,11 +1,9 @@
 package CodeSavannaUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Random;
 import java.util.Scanner;
 
-public class utils {
+public class arrayUtils {
 
     public static String[] getRamdomItem(String[][] matrix, int minIndex, int maxIndex) {
         Random rand = new Random();

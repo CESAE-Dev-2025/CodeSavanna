@@ -2,7 +2,7 @@ package CodeSavannaUtils;
 
 import java.util.Scanner;
 
-import static CodeSavannaUtils.utils.*;
+import static CodeSavannaUtils.arrayUtils.*;
 
 public class coreUtils {
 
