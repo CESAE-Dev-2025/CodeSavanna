@@ -47,6 +47,17 @@ public class printUtils {
         System.out.println();
     }
 
+    public static void printIteractionStats(String listTitle, String[][] animalInteractions) {
+        System.out.println(listTitle);
+        if (animalInteractions.length == 0) {
+            System.out.println("- Não houve interações deste tipo para este animal.");
+        } else if (animalInteractions.length == 1) {
+            System.out.println("- " + animalInteractions[0][4] + " (1 vez)");
+        } else {
+            System.out.println("- " + animalInteractions[0][4] + " (" + animalInteractions.length + " vezes)");
+        }
+    }
+
     public static void printResultFooter() {
         System.out.println("+----------------------------------------------------------------------+");
     }

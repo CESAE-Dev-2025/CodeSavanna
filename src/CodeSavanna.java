@@ -2,6 +2,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import static CodeSavannaUtils.utils.*;
+import static CodeSavannaUtils.coreUtils.*;
 import static CodeSavannaUtils.fileUtils.*;
 import static CodeSavannaUtils.printUtils.*;
 
@@ -44,6 +45,32 @@ public class CodeSavanna {
         } while (!option.equals("0"));
     }
 
+    static void printInteractionsStats(String[][] interactions) {
+        int visitCount = countValueInColumn(interactions, 2, "VISITA");
+        int showCount = countValueInColumn(interactions, 2, "ESPETACULO");
+        int feedCount = countValueInColumn(interactions, 2, "ALIMENTACAO");
+        int sponsorCount = countValueInColumn(interactions, 2, "APADRINHAMENTO");
+
+        printResultHeader("Estatísticas gerais de interações");
+
+        System.out.printf("%-21s", "Total de interações:");
+        System.out.println(interactions.length - 1); // Excluimos a linha com os cabeçalhos
+
+        System.out.printf("%-21s", "APADRINHAMENTO:");
+        System.out.println(visitCount);
+
+        System.out.printf("%-21s", "ESPETACULO:");
+        System.out.println(showCount);
+
+        System.out.printf("%-21s", "ALIMENTACAO:");
+        System.out.println(feedCount);
+
+        System.out.printf("%-21s", "APADRINHAMENTO:");
+        System.out.println(sponsorCount);
+
+        printResultFooter();
+    }
+
     static void printInteractionsIncomeStats(String[][] interactions) {
         double visitIncome = sumValueByCriteria(interactions, 2, "VISITA");
         double showIncome = sumValueByCriteria(interactions, 2, "ESPETACULO");
@@ -67,32 +94,6 @@ public class CodeSavanna {
 
         System.out.printf("%-19s", "APADRINHAMENTO:");
         System.out.println("APADRINHAMENTO: " + sponsorIncome);
-
-        printResultFooter();
-    }
-
-    static void printInteractionsStats(String[][] interactions) {
-        int visitCount = countValueInColumn(interactions, 2, "VISITA");
-        int showCount = countValueInColumn(interactions, 2, "ESPETACULO");
-        int feedCount = countValueInColumn(interactions, 2, "ALIMENTACAO");
-        int sponsorCount = countValueInColumn(interactions, 2, "APADRINHAMENTO");
-
-        printResultHeader("Estatísticas gerais de interações");
-
-        System.out.printf("%-21s", "Total de interações:");
-        System.out.println(interactions.length - 1); // Excluimos a linha com os cabeçalhos
-
-        System.out.printf("%-21s", "APADRINHAMENTO:");
-        System.out.println(visitCount);
-
-        System.out.printf("%-21s", "ESPETACULO:");
-        System.out.println(showCount);
-
-        System.out.printf("%-21s", "ALIMENTACAO:");
-        System.out.println(feedCount);
-
-        System.out.printf("%-21s", "APADRINHAMENTO:");
-        System.out.println(sponsorCount);
 
         printResultFooter();
     }
@@ -135,43 +136,6 @@ public class CodeSavanna {
         System.out.println(maxInteractions);
 
         printResultFooter();
-    }
-
-    static String[] getSpecies(String[][] animals) {
-        int uniqueSpeciesCount = 0;
-        boolean uniqueSpeciesFound;
-        for (int i = 1; i < animals.length; i++) {
-            uniqueSpeciesFound = true;
-            for (int j = 1; j < i; j++) {
-                if (i != j && animals[i][2].equals(animals[j][2])) {
-                    uniqueSpeciesFound = false;
-                    j = i;
-                }
-            }
-            if (uniqueSpeciesFound) {
-                uniqueSpeciesCount++;
-            }
-
-        }
-
-        String[] species = new String[uniqueSpeciesCount];
-        int speciesIndex = 0;
-        for (int i = 1; i < animals.length; i++) {
-            uniqueSpeciesFound = true;
-            for (int j = 1; j < i; j++) {
-                if (i != j && animals[i][2].equals(animals[j][2])) {
-                    uniqueSpeciesFound = false;
-                    j = i;
-                }
-            }
-            if (uniqueSpeciesFound) {
-                species[speciesIndex] = animals[i][2];
-                speciesIndex++;
-            }
-
-        }
-
-        return species;
     }
 
     static void printTopSponsoredSpecies(String[][] animals, String[][] interactions) {
@@ -221,118 +185,6 @@ public class CodeSavanna {
 
     }
 
-    static String getValidAnimal(String[][] animals) {
-        Scanner input = new Scanner(System.in);
-        String selectedAnimal;
-        boolean animalExists;
-
-        do {
-            System.out.print("Digite o ID do animal: ");
-            selectedAnimal = input.next().trim().toUpperCase();
-            animalExists = existsInMatrix(animals, 0, selectedAnimal);
-        } while (!animalExists);
-
-        return selectedAnimal;
-    }
-
-    public static String getValidString(String message) {
-        Scanner input = new Scanner(System.in);
-        String userInput;
-        boolean validString = true;
-
-        do {
-            System.out.print(message);
-            userInput = input.nextLine().trim();
-
-            if (userInput.length() < 3 || userInput.length() > 50) {
-                validString = false;
-            }
-
-        } while (!validString);
-
-        return userInput;
-    }
-
-    static boolean isValidEmail(String email) {
-        // Email válido deve ter o seguinte formato mínimo: xxx@yyy.zz
-
-        String[] emailParts = email.split("@");
-        if (emailParts.length != 2) {
-            return false;
-        }
-
-        if (emailParts[0].length() < 3 || emailParts[0].length() > 50) {
-            return false;
-        }
-
-        String[] emailDot = emailParts[1].split("\\.");
-        if (emailDot[0].length() < 3 || emailDot[1].length() < 2) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static String getValidEmail(String message) {
-        Scanner input = new Scanner(System.in);
-        String userInput;
-        boolean validString = true;
-
-        do {
-            System.out.print(message);
-            userInput = input.next().trim();
-
-            if (!isValidEmail(userInput)) {
-                validString = false;
-                System.out.println("Por favor digite um email no formato 'xxx@yyy.zz'.");
-            }
-
-        } while (!validString);
-
-        return userInput;
-    }
-
-    public static double getValidDouble(String message) {
-        Scanner input = new Scanner(System.in);
-        double userInput;
-        boolean validString = true;
-
-        do {
-            System.out.print(message);
-            userInput = input.nextDouble();
-
-            if (userInput < 10) {
-                validString = false;
-                System.out.println("O valor mínimo de apadrinhamento é de 10.00 €");
-            }
-
-        } while (!validString);
-
-        return userInput;
-    }
-
-    public static String[][] filterByAnimalAndInteractionType(String[][] interactions, int animalColumn, String animalValue, int iteractionTypeColumn, String interactionTypeValue) {
-        int count = 0;
-
-        for (int i = 1; i < interactions.length; i++) {
-            if (interactions[i][animalColumn].equals(animalValue) && interactions[i][iteractionTypeColumn].equals(interactionTypeValue)) {
-                count++;
-            }
-        }
-
-        String[][] filteredMatrix = new String[count][interactions[0].length];
-        int filteredIndex = 0;
-
-        for (int i = 1; i < interactions.length; i++) {
-            if (interactions[i][animalColumn].equals(animalValue) && interactions[i][iteractionTypeColumn].equals(interactionTypeValue)) {
-                filteredMatrix[filteredIndex] = interactions[i];
-                filteredIndex++;
-            }
-        }
-
-        return filteredMatrix;
-    }
-
     static void printAnimalSponsors(String[][] animals, String[][] interactions, String[][] clients) {
 
         String selectedAnimal = getValidAnimal(animals);
@@ -371,120 +223,20 @@ public class CodeSavanna {
         }
     }
 
-    private static String[] getUniqueShows(String[][] interactions, int searchColumn, String searchValue) {
-        int uniqueShowsCount = 0;
-        boolean uniqueShowsFound;
-        for (int i = 1; i < interactions.length; i++) {
-
-            if (interactions[i][searchColumn].equals(searchValue)) {
-
-                uniqueShowsFound = true;
-                for (int j = 1; j < i; j++) {
-                    if (i != j && interactions[i][4].equals(interactions[j][4])) {
-                        uniqueShowsFound = false;
-                        j = i;
-                    }
-                }
-                if (uniqueShowsFound) {
-                    uniqueShowsCount++;
-                }
-            }
-
-        }
-
-        String[] shows = new String[uniqueShowsCount];
-        int showsIndex = 0;
-        for (int i = 1; i < interactions.length; i++) {
-
-            if (interactions[i][searchColumn].equals(searchValue)) {
-                uniqueShowsFound = true;
-                for (int j = 1; j < i; j++) {
-                    if (i != j && interactions[i][4].equals(interactions[j][4])) {
-                        uniqueShowsFound = false;
-                        j = i;
-                    }
-                }
-                if (uniqueShowsFound) {
-                    shows[showsIndex] = interactions[i][4];
-                    showsIndex++;
-                }
-
-            }
-        }
-
-        return shows;
-    }
-
-    static double[] getShowsIncome(String[][] interactions, String[] shows) {
-        double[] showsIncome = new double[shows.length];
-
-        for (int i = 0; i < shows.length; i++) {
-
-            for (int j = 1; j < interactions.length; j++) {
-                if (shows[i].equals(interactions[j][4])) {
-                    showsIncome[i] += Double.parseDouble(interactions[j][5]);
-                }
-            }
-
-        }
-
-        return showsIncome;
-    }
-
-    private static int getMostValuableShowIndex(double[] showsIncome) {
-
-        int greaterIndex = 0;
-        double greater = showsIncome[greaterIndex];
-
-        for (int i = 1; i < showsIncome.length; i++) {
-            if (showsIncome[i] > greater) {
-                greater = showsIncome[i];
-                greaterIndex = i;
-            }
-        }
-
-        return greaterIndex;
-    }
-
-    static String[][] getMostValuableAnimal(String[][] animals, String animalId) {
-        String[][] valuableAnimal = new String[1][animals[0].length];
-
-        for (int i = 1; i < animals.length; i++) {
-            if (animals[i][0].equals(animalId)) {
-                valuableAnimal[0] = animals[i];
-            }
-        }
-
-        return valuableAnimal;
-    }
-
-    private static String getAnimalIdFromShowName(String[][] interactions, String show) {
-        String animalId = "";
-
-        for (int i = 1; i < interactions.length; i++) {
-            if (interactions[i][4].equals(show)) {
-                animalId = interactions[i][3];
-                i = interactions.length;
-            }
-        }
-
-        return animalId;
-    }
-
-    static void printMostRantableShow(String[][] interactions, String[][] animals) {
+    static void printMostProfitableShow(String[][] interactions, String[][] animals) {
         String[] shows = getUniqueShows(interactions, 2, "ESPETACULO");
         double[] showsIncome = getShowsIncome(interactions, shows);
-        int mostValuableShowIndex = getMostValuableShowIndex(showsIncome);
-        String animalId = getAnimalIdFromShowName(interactions, shows[mostValuableShowIndex]);
+        int mostProfitableShowIndex = getMostProfitableShowIndex(showsIncome);
+        String animalId = getAnimalIdFromShowName(interactions, shows[mostProfitableShowIndex]);
         String[][] animal = getMostValuableAnimal(animals, animalId);
 
         printResultHeader("Espetáculo mais rentável");
 
         System.out.printf("%-20s", "Nome do espetáculo:");
-        System.out.println(shows[mostValuableShowIndex]);
+        System.out.println(shows[mostProfitableShowIndex]);
 
         System.out.printf("%-20s", "Receita total:");
-        System.out.println(showsIncome[mostValuableShowIndex] + " €");
+        System.out.println(showsIncome[mostProfitableShowIndex] + " €");
 
         System.out.printf("%-20s", "Animal principal:");
         System.out.println();
@@ -495,24 +247,6 @@ public class CodeSavanna {
         System.out.println(animal[0][2]);
 
         printResultFooter();
-    }
-
-    private static int[] getExtintionAnimalsInteractions(String[][] interactions, String[][] extintionAnimals) {
-
-        int[] animalInteractions = new int[extintionAnimals.length];
-        for (int i = 0; i < extintionAnimals.length; i++) {
-            animalInteractions[i] = countValueInColumn(interactions, 3, extintionAnimals[i][0]);
-        }
-        return animalInteractions;
-    }
-
-    private static double[] getExtintionAnimalsIncomes(String[][] interactions, String[][] extintionAnimals) {
-
-        double[] animalIncome = new double[extintionAnimals.length];
-        for (int i = 0; i < extintionAnimals.length; i++) {
-            animalIncome[i] = sumValueByCriteria(interactions, 3, extintionAnimals[i][0]);
-        }
-        return animalIncome;
     }
 
     private static void printExtintionRank(String[][] animals, String[][] interactions) {
@@ -548,69 +282,6 @@ public class CodeSavanna {
 
             printResultFooter();
         }
-    }
-
-    private static String[] getHabitats(String[][] animals) {
-        int uniqueHabitatsCount = 0;
-        boolean uniquehabitatsFound;
-        for (int i = 1; i < animals.length; i++) {
-            uniquehabitatsFound = true;
-            for (int j = 1; j < i; j++) {
-                if (i != j && animals[i][3].equals(animals[j][3])) {
-                    uniquehabitatsFound = false;
-                    j = i;
-                }
-            }
-            if (uniquehabitatsFound) {
-                uniqueHabitatsCount++;
-            }
-
-        }
-
-        String[] habitats = new String[uniqueHabitatsCount];
-        int habitatsIndex = 0;
-        for (int i = 1; i < animals.length; i++) {
-            uniquehabitatsFound = true;
-            for (int j = 1; j < i; j++) {
-                if (i != j && animals[i][3].equals(animals[j][3])) {
-                    uniquehabitatsFound = false;
-                    j = i;
-                }
-            }
-            if (uniquehabitatsFound) {
-                habitats[habitatsIndex] = animals[i][3];
-                habitatsIndex++;
-            }
-
-        }
-
-        return habitats;
-    }
-
-    private static int getHabitatInteractions(String[][] interactions, String[][] habitatAnimals) {
-        int interactionCount = 0;
-
-        for (int i = 0; i < habitatAnimals.length; i++) {
-            for (int j = 1; j < interactions.length; j++) {
-                if (interactions[j][3].equals(habitatAnimals[i][0])) {
-                    interactionCount++;
-                }
-            }
-        }
-        return interactionCount;
-    }
-
-    private static double getHabitatIncome(String[][] interactions, String[][] habitatAnimals) {
-        double interactionIncome = 0;
-
-        for (int i = 0; i < habitatAnimals.length; i++) {
-            for (int j = 1; j < interactions.length; j++) {
-                if (interactions[j][3].equals(habitatAnimals[i][0])) {
-                    interactionIncome += Double.parseDouble(interactions[j][5]);
-                }
-            }
-        }
-        return interactionIncome;
     }
 
     private static void printHabitatStats(String[][] animals, String[][] interactions) {
@@ -686,7 +357,7 @@ public class CodeSavanna {
                     printAnimalSponsors(animals, interactions, clients);
                     break;
                 case "7":
-                    printMostRantableShow(interactions, animals);
+                    printMostProfitableShow(interactions, animals);
                     break;
                 case "8":
                     printExtintionRank(animals, interactions);
@@ -703,70 +374,69 @@ public class CodeSavanna {
         } while (!option.equals("0"));
 
     }
+    
+    static void printAnimalsByHabitat(String[][] animals) {
+        String[] habitats = getHabitats(animals);
 
-    static void clientMenu(String[][] animals, String[][] clients, String[][] interactions) {
-        Scanner sc = new Scanner(System.in);
-        String option;
+        printResultHeader("Catálogo de animais por habitat");
 
-        do {
-            printResultHeader("CodeSavanna - Menu CLIENTE");
+        System.out.println();
+        for (int i = 0; i < habitats.length; i++) {
 
-            System.out.println("1 - Ver catálogo de animais por habitat");
-            System.out.println("2 - Ver atividades de um animal (espetáculos e alimentações)");
-            System.out.println("3 - Simular apadrinhamento de um animal");
-            System.out.println("4 - Jogo: adivinha a espécie");
-            System.out.println("0 - Voltar");
+            String[][] habitatAnimals = filterMatrix(animals, 3, habitats[i]);
 
-            System.out.print("\nOpção: ");
-            option = sc.next();
+            printResultSubHeader(habitats[i]);
 
-            switch (option) {
-                case "1":
-                    printAnimalsByHabitat(animals);
-                    break;
-                case "2":
-                    printAnimalsActivities(animals, interactions);
-                    break;
-                case "3":
-                    sponsorSimulation(animals, clients, interactions);
-                    break;
-                case "4":
-                    playSpecieGuess(animals);
-                    break;
-                case "0":
-                    break;
-                default:
-                    System.out.println("Opção inválida!");
-                    break;
+            for (int j = 0; j < habitatAnimals.length; j++) {
+                System.out.println("- " + habitatAnimals[j][1] + " (" + habitatAnimals[j][2] + ")");
             }
+            System.out.println();
+        }
 
-        } while (!option.equals("0"));
-
+        printResultFooter();
     }
 
-    static String getExtintionRiskMessage(String[] animal) {
-        boolean isAtExtintionRisk = animal[5].equals("SIM");
-        String extintionRiskMessage;
-        if (isAtExtintionRisk) {
-            extintionRiskMessage = "Está em perigo de extinção";
-        } else {
-            extintionRiskMessage = "Não está em perigo de extinção";
-        }
-        return extintionRiskMessage;
+    static void printAnimalsActivities(String[][] animals, String[][] interactions) {
+        String selectedAnimal = getValidAnimal(animals);
+        String[][] seledtedAnimalInfo = filterMatrix(animals, 0, selectedAnimal);
+        String[][] selectedAnimalShows = filterByAnimalAndInteractionType(interactions, 3, selectedAnimal, 2, "ESPETACULO");
+        String[][] selectedAnimalFeed = filterByAnimalAndInteractionType(interactions, 3, selectedAnimal, 2, "ALIMENTACAO");
+
+        printResultHeader("Atividades do animal " + seledtedAnimalInfo[0][1] + " (" + seledtedAnimalInfo[0][2] + ")");
+
+        printIteractionStats("ESPETÁCULOS:", selectedAnimalShows);
+        printIteractionStats("ALIMENTAÇÃO:", selectedAnimalFeed);
+
+        printResultFooter();
     }
 
-    static boolean isGuessed(String specieGuess, String specie, int guessCount) {
-        boolean guessed;
-        guessed = specieGuess.equalsIgnoreCase(specie);
+    static void sponsorSimulation(String[][] animals, String[][] clients, String[][] interactions) {
+        String clientName = getValidString("Digite seu nome: ");
+        String clientEmail = getValidEmail("Digite seu email: ");
 
-        if (guessed) {
-            System.out.println("\nParabéns! Descobriste a espécie!");
-            System.out.println("Precisaste de " + guessCount + " tentativas.");
-        } else {
-            System.out.println("\nResposta incorreta.");
-            System.out.print("Deseja tentar outra vez? (S/N) ");
-        }
-        return guessed;
+        String selectedAnimalId = getValidAnimal(animals);
+        String[][] seledtedAnimalInfo = filterMatrix(animals, 0, selectedAnimalId);
+
+        double sponsorAmount = getValidDouble("Digite o valor do patrocínio desejado: ");
+        String sponsorTier = getSponsorTier(sponsorAmount);
+
+        printResultHeader("Apadrinhamento de um animal");
+        printResultSubHeader("Resumo do apadrinhamento");
+
+        System.out.println();
+        System.out.printf("%-10s", "Padrinho:");
+        System.out.println(clientName + " (" + clientEmail + ")");
+
+        System.out.printf("%-10s", "Animal:");
+        System.out.println(seledtedAnimalInfo[0][1] + " (" + seledtedAnimalInfo[0][2] + ") - " + seledtedAnimalInfo[0][3]);
+
+        System.out.printf("%-10s", "Plano:");
+        System.out.println(sponsorTier);
+
+        System.out.printf("%-10s", "Valor:");
+        System.out.println(sponsorAmount + " €/mês");
+
+        printResultFooter();
     }
 
     private static void playSpecieGuess(String[][] animals) {
@@ -808,92 +478,44 @@ public class CodeSavanna {
         printResultFooter();
     }
 
-    static void sponsorSimulation(String[][] animals, String[][] clients, String[][] interactions) {
-        String clientName = getValidString("Digite seu nome: ");
-        String clientEmail = getValidEmail("Digite seu email: ");
+    static void clientMenu(String[][] animals, String[][] clients, String[][] interactions) {
+        Scanner sc = new Scanner(System.in);
+        String option;
 
-        String selectedAnimalId = getValidAnimal(animals);
-        String[][] seledtedAnimalInfo = filterMatrix(animals, 0, selectedAnimalId);
+        do {
+            printResultHeader("CodeSavanna - Menu CLIENTE");
 
-        double sponsorAmount = getValidDouble("Digite o valor do patrocínio desejado: ");
-        String sponsorTier = getSponsorTier(sponsorAmount);
+            System.out.println("1 - Ver catálogo de animais por habitat");
+            System.out.println("2 - Ver atividades de um animal (espetáculos e alimentações)");
+            System.out.println("3 - Simular apadrinhamento de um animal");
+            System.out.println("4 - Jogo: adivinha a espécie");
+            System.out.println("0 - Voltar");
 
-        printResultHeader("Apadrinhamento de um animal");
-        printResultSubHeader("Resumo do apadrinhamento");
+            System.out.print("\nOpção: ");
+            option = sc.next();
 
-        System.out.println();
-        System.out.printf("%-10s", "Padrinho:");
-        System.out.println(clientName + " (" + clientEmail + ")");
-
-        System.out.printf("%-10s", "Animal:");
-        System.out.println(seledtedAnimalInfo[0][1] + " (" + seledtedAnimalInfo[0][2] + ") - " + seledtedAnimalInfo[0][3]);
-
-        System.out.printf("%-10s", "Plano:");
-        System.out.println(sponsorTier);
-
-        System.out.printf("%-10s", "Valor:");
-        System.out.println(sponsorAmount + " €/mês");
-
-        printResultFooter();
-    }
-
-    static String getSponsorTier(double sponsorAmount) {
-        if (sponsorAmount <= 25.00) {
-            return "Apadrinhamento Simples";
-        }
-
-        if (sponsorAmount <= 50.00) {
-            return "Apadrinhamento Gold";
-        }
-
-        return "Apadrinhamento Diamond";
-
-    }
-
-    private static void printIteractionStats(String listTitle, String[][] animalInteractions) {
-        System.out.println(listTitle);
-        if (animalInteractions.length == 0) {
-            System.out.println("- Não houve interações deste tipo para este animal.");
-        } else if (animalInteractions.length == 1) {
-            System.out.println("- " + animalInteractions[0][4] + " (1 vez)");
-        } else {
-            System.out.println("- " + animalInteractions[0][4] + " (" + animalInteractions.length + " vezes)");
-        }
-    }
-
-    static void printAnimalsActivities(String[][] animals, String[][] interactions) {
-        String selectedAnimal = getValidAnimal(animals);
-        String[][] seledtedAnimalInfo = filterMatrix(animals, 0, selectedAnimal);
-        String[][] selectedAnimalShows = filterByAnimalAndInteractionType(interactions, 3, selectedAnimal, 2, "ESPETACULO");
-        String[][] selectedAnimalFeed = filterByAnimalAndInteractionType(interactions, 3, selectedAnimal, 2, "ALIMENTACAO");
-
-        printResultHeader("Atividades do animal " + seledtedAnimalInfo[0][1] + " (" + seledtedAnimalInfo[0][2] + ")");
-
-        printIteractionStats("ESPETÁCULOS:", selectedAnimalShows);
-        printIteractionStats("ALIMENTAÇÃO:", selectedAnimalFeed);
-
-        printResultFooter();
-    }
-
-    static void printAnimalsByHabitat(String[][] animals) {
-        String[] habitats = getHabitats(animals);
-
-        printResultHeader("Catálogo de animais por habitat");
-
-        System.out.println();
-        for (int i = 0; i < habitats.length; i++) {
-
-            String[][] habitatAnimals = filterMatrix(animals, 3, habitats[i]);
-
-            printResultSubHeader(habitats[i]);
-
-            for (int j = 0; j < habitatAnimals.length; j++) {
-                System.out.println("- " + habitatAnimals[j][1] + " (" + habitatAnimals[j][2] + ")");
+            switch (option) {
+                case "1":
+                    printAnimalsByHabitat(animals);
+                    break;
+                case "2":
+                    printAnimalsActivities(animals, interactions);
+                    break;
+                case "3":
+                    sponsorSimulation(animals, clients, interactions);
+                    break;
+                case "4":
+                    playSpecieGuess(animals);
+                    break;
+                case "0":
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+                    break;
             }
-            System.out.println();
-        }
 
-        printResultFooter();
+        } while (!option.equals("0"));
+
     }
 
     static void loginMenu(String[][] animals, String[][] clients, String[][] interactions) {
@@ -951,4 +573,5 @@ public class CodeSavanna {
 
         printExitBoard();
     }
+    
 }
