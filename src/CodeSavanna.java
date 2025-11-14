@@ -717,7 +717,7 @@ public class CodeSavanna {
                     }
                     break;
                 case "0":
-                    System.out.println("Obrigado. Tenha um ótimo dia.");
+                    System.out.println("\nObrigado. Tenha um ótimo dia.");
                     break;
                 default:
                     System.out.println("Opção inválida!");

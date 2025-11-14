@@ -132,7 +132,7 @@ public class printUtils {
      */
     public static void printExitBoard() {
         char copyrightSymbol = '©';
-        System.out.println("\n\n");
+        System.out.println();
         System.out.println("                      ,---.           ,---.");
         System.out.println("                     / /\"`.\\.--\"\"\"--./,'\"\\ \\");
         System.out.println("                     \\ \\    _       _    / /");
@@ -159,13 +159,13 @@ public class printUtils {
         System.out.println("| |                                                             | |");
         System.out.println("| |_____________________________________________________________| |");
         System.out.println("|_________________________________________________________________|");
-        System.out.println("                 )__________|__|__________(");
-        System.out.println("                |            ||            |");
-        System.out.println("                |____________||____________|");
-        System.out.println("                  ),-----.(      ),-----.(");
-        System.out.println("                ,'   ==.   \\    /  .==    `.");
-        System.out.println("               /            )  (            \\");
-        System.out.println("               `==========='    `==========='  hjw");
+        System.out.println("                   )__________|__|__________(");
+        System.out.println("                  |            ||            |");
+        System.out.println("                  |____________||____________|");
+        System.out.println("                    ),-----.(      ),-----.(");
+        System.out.println("                  ,'   ==.   \\    /  .==    `.");
+        System.out.println("                 /            )  (            \\");
+        System.out.println("                 `==========='    `==========='  hjw");
         System.out.println("\n\n");
     }
 
