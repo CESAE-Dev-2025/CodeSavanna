@@ -232,6 +232,82 @@ public class CodeSavanna {
         return selectedAnimal;
     }
 
+    public static String getValidString(String message) {
+        Scanner input = new Scanner(System.in);
+        String userInput;
+        boolean validString = true;
+
+        do {
+            System.out.print(message);
+            userInput = input.nextLine().trim();
+
+            if (userInput.length() < 3 || userInput.length() > 50) {
+                validString = false;
+            }
+
+        } while (!validString);
+
+        return userInput;
+    }
+
+    static boolean isValidEmail(String email) {
+        // Email válido deve ter o seguinte formato mínimo: xxx@yyy.zz
+
+        String[] emailParts = email.split("@");
+        if (emailParts.length != 2) {
+            return false;
+        }
+
+        if (emailParts[0].length() < 3 || emailParts[0].length() > 50) {
+            return false;
+        }
+
+        String[] emailDot = emailParts[1].split("\\.");
+        if (emailDot[0].length() < 3 || emailDot[1].length() < 2) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static String getValidEmail(String message) {
+        Scanner input = new Scanner(System.in);
+        String userInput;
+        boolean validString = true;
+
+        do {
+            System.out.print(message);
+            userInput = input.next().trim();
+
+            if (!isValidEmail(userInput)) {
+                validString = false;
+                System.out.println("Por favor digite um email no formato 'xxx@yyy.zz'.");
+            }
+
+        } while (!validString);
+
+        return userInput;
+    }
+
+    public static double getValidDouble(String message) {
+        Scanner input = new Scanner(System.in);
+        double userInput;
+        boolean validString = true;
+
+        do {
+            System.out.print(message);
+            userInput = input.nextDouble();
+
+            if (userInput < 10) {
+                validString = false;
+                System.out.println("O valor mínimo de apadrinhamento é de 10.00 €");
+            }
+
+        } while (!validString);
+
+        return userInput;
+    }
+
     public static String[][] filterByAnimalAndInteractionType(String[][] interactions, int animalColumn, String animalValue, int iteractionTypeColumn, String interactionTypeValue) {
         int count = 0;
 
@@ -647,7 +723,7 @@ public class CodeSavanna {
                     printAnimalsActivities(animals, interactions);
                     break;
                 case 3:
-                    System.out.println("3 - Simular apadrinhamento de um animal");
+                    sponsorSimulation(animals, clients, interactions);
                     break;
                 case 4:
                     System.out.println("4 - Jogo: adivinha a espécie");
@@ -658,6 +734,48 @@ public class CodeSavanna {
             }
 
         } while (option != 0);
+
+    }
+
+    static void sponsorSimulation(String[][] animals, String[][] clients, String[][] interactions) {
+        String clientName = getValidString("Digite seu nome: ");
+        String clientEmail = getValidEmail("Digite seu email: ");
+
+        String selectedAnimalId = getValidAnimal(animals);
+        String[][] seledtedAnimalInfo = filterMatrix(animals, 0, selectedAnimalId);
+
+        double sponsorAmount = getValidDouble("Digite o valor do patrocínio desejado: ");
+        String sponsorTier = getSponsorTier(sponsorAmount);
+
+        printResultHeader("Apadrinhamento de um animal");
+        printResultSubHeader("Resumo do apadrinhamento");
+
+        System.out.println();
+        System.out.printf("%-10s", "Padrinho:");
+        System.out.println(clientName + " (" + clientEmail + ")");
+
+        System.out.printf("%-10s", "Animal:");
+        System.out.println(seledtedAnimalInfo[0][1] + " (" + seledtedAnimalInfo[0][2] + ") - " + seledtedAnimalInfo[0][3]);
+
+        System.out.printf("%-10s", "Plano:");
+        System.out.println(sponsorTier);
+
+        System.out.printf("%-10s", "Valor:");
+        System.out.println(sponsorAmount + " €/mês");
+
+        printResultFooter();
+    }
+
+    static String getSponsorTier(double sponsorAmount) {
+        if (sponsorAmount <= 25.00) {
+            return "Apadrinhamento Simples";
+        }
+
+        if (sponsorAmount <= 50.00) {
+            return "Apadrinhamento Gold";
+        }
+
+        return "Apadrinhamento Diamond";
 
     }
 
@@ -760,8 +878,7 @@ public class CodeSavanna {
         System.out.println("\n\n\n");
         System.out.println("Bem vindo ao CodeSavanna!");
 
-        // loginMenu(animals, clients, interactions);
-        clientMenu(animals, clients, interactions);
+        loginMenu(animals, clients, interactions);
 
         printExitBoard();
     }
