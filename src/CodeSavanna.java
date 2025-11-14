@@ -2,12 +2,14 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import static CodeSavannaUtils.utils.*;
-import static CodeSavannaUtils.utils.printResultHeader;
+import static CodeSavannaUtils.fileUtils.*;
+import static CodeSavannaUtils.printUtils.*;
 
 public class CodeSavanna {
 
     static void printFileMenu(String[][] animals, String[][] clients, String[][] interactions) {
-        int option;
+        Scanner sc = new Scanner(System.in);
+        String option;
 
         do {
             printResultHeader("CodeSavanna - Menu Ficheiros");
@@ -17,31 +19,29 @@ public class CodeSavanna {
             System.out.println("3 - Listar conteúdo do ficheiro 'interacoes'");
             System.out.println("0 - Voltar");
 
-            Scanner sc = new Scanner(System.in);
             System.out.print("\nOpção: ");
-            option = sc.nextInt();
+            option = sc.next();
 
             switch (option) {
-                case 1:
+                case "1":
                     printResultHeader("Listar conteúdo do ficheiro 'animais'");
                     printMatrix(animals);
                     break;
-                case 2:
+                case "2":
                     printResultHeader("Listar conteúdo do ficheiro 'clientes'");
                     printMatrix(clients);
                     break;
-                case 3:
+                case "3":
                     printResultHeader("Listar conteúdo do ficheiro 'interacoes'");
                     printMatrix(interactions);
                     break;
-                case 0:
-                    //System.out.println("0 - Voltar");
+                case "0":
                     break;
                 default:
                     System.out.println("Opção inválida!");
                     break;
             }
-        } while (option != 0);
+        } while (!option.equals("0"));
     }
 
     static void printInteractionsIncomeStats(String[][] interactions) {
@@ -228,7 +228,7 @@ public class CodeSavanna {
 
         do {
             System.out.print("Digite o ID do animal: ");
-            selectedAnimal = input.next().trim().toUpperCase();     // CHECK: Pode usar toUpperCase() ou toLowerCase()?
+            selectedAnimal = input.next().trim().toUpperCase();
             animalExists = existsInMatrix(animals, 0, selectedAnimal);
         } while (!animalExists);
 
@@ -646,7 +646,8 @@ public class CodeSavanna {
     }
 
     static void adminMenu(String[][] animals, String[][] clients, String[][] interactions) {
-        int option;
+        Scanner sc = new Scanner(System.in);
+        String option;
 
         do {
             printResultHeader("CodeSavanna - Menu ADMIN");
@@ -662,50 +663,50 @@ public class CodeSavanna {
             System.out.println("9 - Estatísticas por habitat");
             System.out.println("0 - Voltar");
 
-            Scanner sc = new Scanner(System.in);
             System.out.print("\nOpção: ");
-            option = sc.nextInt();
+            option = sc.next();
 
             switch (option) {
-                case 1:
+                case "1":
                     printFileMenu(animals, clients, interactions);
                     break;
-                case 2:
+                case "2":
                     printInteractionsStats(interactions);
                     break;
-                case 3:
+                case "3":
                     printInteractionsIncomeStats(interactions);
                     break;
-                case 4:
+                case "4":
                     printMostPopularAnimal(animals, interactions);
                     break;
-                case 5:
+                case "5":
                     printTopSponsoredSpecies(animals, interactions);
                     break;
-                case 6:
+                case "6":
                     printAnimalSponsors(animals, interactions, clients);
                     break;
-                case 7:
+                case "7":
                     printMostRantableShow(interactions, animals);
                     break;
-                case 8:
+                case "8":
                     printExtintionRank(animals, interactions);
                     break;
-                case 9:
+                case "9":
                     printHabitatStats(animals, interactions);
                     break;
-                case 0:
+                case "0":
                     break;
                 default:
                     System.out.println("Opção inválida!");
                     break;
             }
-        } while (option != 0);
+        } while (!option.equals("0"));
 
     }
 
     static void clientMenu(String[][] animals, String[][] clients, String[][] interactions) {
-        int option;
+        Scanner sc = new Scanner(System.in);
+        String option;
 
         do {
             printResultHeader("CodeSavanna - Menu CLIENTE");
@@ -716,31 +717,30 @@ public class CodeSavanna {
             System.out.println("4 - Jogo: adivinha a espécie");
             System.out.println("0 - Voltar");
 
-            Scanner sc = new Scanner(System.in);
             System.out.print("\nOpção: ");
-            option = sc.nextInt();
+            option = sc.next();
 
             switch (option) {
-                case 1:
+                case "1":
                     printAnimalsByHabitat(animals);
                     break;
-                case 2:
+                case "2":
                     printAnimalsActivities(animals, interactions);
                     break;
-                case 3:
+                case "3":
                     sponsorSimulation(animals, clients, interactions);
                     break;
-                case 4:
+                case "4":
                     playSpecieGuess(animals);
                     break;
-                case 0:
+                case "0":
                     break;
                 default:
                     System.out.println("Opção inválida!");
                     break;
             }
 
-        } while (option != 0);
+        } while (!option.equals("0"));
 
     }
 
@@ -773,19 +773,19 @@ public class CodeSavanna {
         Scanner input = new Scanner(System.in);
 
         printResultHeader("Jogo: adivinha a espécie");
-        
+
         String keepPlaying;
         do {
-            String[] animal = getRamdomItem(animals);
+            String[] animal = getRamdomItem(animals, 1, animals.length - 1);
             String extintionRiskMessage = getExtintionRiskMessage(animal);
 
             printResultSubHeader("Pistas");
             System.out.printf("%-19s", "PISTA 1 (habitat):");
             System.out.println(animal[3]);
-            
-            System.out.printf("%-19s", "PISTA 2 (dieta): É");
-            System.out.println(animal[4]);
-            
+
+            System.out.printf("%-19s", "PISTA 2 (dieta):");
+            System.out.println("É " + animal[4]);
+
             System.out.printf("%-19s", "PISTA 3 (risco):");
             System.out.println(extintionRiskMessage);
 
@@ -797,14 +797,14 @@ public class CodeSavanna {
                 String specieGuess = getValidString("\nQual a espécie? ");
                 guessed = isGuessed(specieGuess, animal[2], guessCount);
                 keepTrying = input.next().trim().toUpperCase();
-                
+
             } while (!guessed && keepTrying.equalsIgnoreCase("S"));
 
             System.out.print("\nDeseja jogar outra vez? (S/N) ");
             keepPlaying = input.next();
-            
+
         } while (keepPlaying.equalsIgnoreCase("S"));
-        
+
         printResultFooter();
     }
 
@@ -897,7 +897,8 @@ public class CodeSavanna {
     }
 
     static void loginMenu(String[][] animals, String[][] clients, String[][] interactions) {
-        int loginOption;
+        Scanner sc = new Scanner(System.in);
+        String loginOption;
 
         do {
             printResultHeader("CodeSavanna - Login");
@@ -907,22 +908,21 @@ public class CodeSavanna {
             System.out.println("2 - Cliente");
             System.out.println("0 - Sair");
 
-            Scanner sc = new Scanner(System.in);
             System.out.print("\nOpção: ");
-            loginOption = sc.nextInt();
+            loginOption = sc.next();
 
             switch (loginOption) {
-                case 1:
+                case "1":
                     if (validLogin("admin")) {
                         adminMenu(animals, clients, interactions);
                     }
                     break;
-                case 2:
+                case "2":
                     if (validLogin("client")) {
                         clientMenu(animals, clients, interactions);
                     }
                     break;
-                case 0:
+                case "0":
                     System.out.println("Obrigado. Tenha um ótimo dia.");
                     break;
                 default:
@@ -930,13 +930,13 @@ public class CodeSavanna {
                     break;
             }
 
-        } while (loginOption != 0);
+        } while (!loginOption.equals("0"));
 
     }
 
     public static void main(String[] args) throws FileNotFoundException {
         // TODO: Refazer comentários de funções
-        // TODO: Procurar funções que possam ser unidas em 1 mais genérica
+        // TODO: Rever validação de inputs
         String animalsFilePath = "files/animais.csv";
         String clientsFilePath = "files/clientes.csv";
         String interactionsFilePath = "files/interacoes.csv";
