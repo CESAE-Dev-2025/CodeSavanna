@@ -732,7 +732,7 @@ public class CodeSavanna {
                     sponsorSimulation(animals, clients, interactions);
                     break;
                 case 4:
-                    System.out.println("4 - Jogo: adivinha a espécie");
+                    playSpecieGuess(animals);
                     break;
                 case 0:
 //                    System.out.println("0 - Voltar");
@@ -744,6 +744,39 @@ public class CodeSavanna {
 
         } while (option != 0);
 
+    }
+
+    private static void playSpecieGuess(String[][] animals) {
+        Scanner input = new Scanner(System.in);
+        String[] animal = getRamdomItem(animals);
+
+        printResultHeader("Jogo: adivinha a espécie");
+        printResultSubHeader("Pistas");
+        System.out.println("PISTA 1 (habitat): " + animal[3]);
+        System.out.println("PISTA 2 (dieta): " + animal[4]);
+        System.out.println("PISTA 3 (habitat): " + animal[5]);
+
+        int guessCount = 0;
+        boolean guessed;
+        String keepTrying = "";
+        do {
+            guessCount++;
+            String specieGuess = getValidString("\nQual a espécie? ");
+            guessed = specieGuess.equalsIgnoreCase(animal[2]);
+
+            if (guessed) {
+                System.out.println("\nParabéns! Descobriste a espécie!");
+                System.out.println("Precisaste de " + guessCount + " tentativas.");
+                System.out.print("Deseja jogar outra vez? (S/N) ");
+            } else {
+                System.out.println("\nResposta incorreta.");
+                System.out.print("Deseja tentar outra vez? (S/N) ");
+            }
+            keepTrying = input.next().trim().toUpperCase();
+
+        } while (!guessed || keepTrying.equals("N"));
+
+        printResultFooter();
     }
 
     static void sponsorSimulation(String[][] animals, String[][] clients, String[][] interactions) {
@@ -881,6 +914,7 @@ public class CodeSavanna {
 
     public static void main(String[] args) throws FileNotFoundException {
         // TODO: Refazer comentários de funções
+        // TODO: Procurar funções que possam ser unidas em 1 mais genérica
         String animalsFilePath = "files/animais.csv";
         String clientsFilePath = "files/clientes.csv";
         String interactionsFilePath = "files/interacoes.csv";
