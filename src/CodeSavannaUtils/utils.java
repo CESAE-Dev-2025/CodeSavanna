@@ -111,6 +111,10 @@ public class utils {
             }
         }
 
+        if (!isValid){
+            System.out.println("\nLogin inválido!");
+        }
+        
         return isValid;
     }
 
