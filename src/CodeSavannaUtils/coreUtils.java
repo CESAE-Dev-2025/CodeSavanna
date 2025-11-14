@@ -21,7 +21,7 @@ public class coreUtils {
         for (int i = 1; i < animals.length; i++) {
             uniqueSpeciesFound = true;
             for (int j = 1; j < i; j++) {
-                if (i != j && animals[i][2].equals(animals[j][2])) {
+                if (animals[i][2].equals(animals[j][2])) {
                     uniqueSpeciesFound = false;
                     j = i;
                 }
@@ -37,7 +37,7 @@ public class coreUtils {
         for (int i = 1; i < animals.length; i++) {
             uniqueSpeciesFound = true;
             for (int j = 1; j < i; j++) {
-                if (i != j && animals[i][2].equals(animals[j][2])) {
+                if (animals[i][2].equals(animals[j][2])) {
                     uniqueSpeciesFound = false;
                     j = i;
                 }
@@ -119,11 +119,8 @@ public class coreUtils {
         }
 
         String[] emailDot = emailParts[1].split("\\.");
-        if (emailDot[0].length() < 3 || emailDot[1].length() < 2) {
-            return false;
-        }
-
-        return true;
+        
+        return emailDot[0].length() >= 3 && emailDot[1].length() >= 2;
     }
 
     /**
@@ -228,7 +225,7 @@ public class coreUtils {
 
                 uniqueShowsFound = true;
                 for (int j = 1; j < i; j++) {
-                    if (i != j && interactions[i][4].equals(interactions[j][4])) {
+                    if (interactions[i][4].equals(interactions[j][4])) {
                         uniqueShowsFound = false;
                         j = i;
                     }
@@ -247,7 +244,7 @@ public class coreUtils {
             if (interactions[i][searchColumn].equals(searchValue)) {
                 uniqueShowsFound = true;
                 for (int j = 1; j < i; j++) {
-                    if (i != j && interactions[i][4].equals(interactions[j][4])) {
+                    if (interactions[i][4].equals(interactions[j][4])) {
                         uniqueShowsFound = false;
                         j = i;
                     }
@@ -412,7 +409,7 @@ public class coreUtils {
         for (int i = 1; i < animals.length; i++) {
             uniquehabitatsFound = true;
             for (int j = 1; j < i; j++) {
-                if (i != j && animals[i][3].equals(animals[j][3])) {
+                if (animals[i][3].equals(animals[j][3])) {
                     uniquehabitatsFound = false;
                     j = i;
                 }
@@ -428,7 +425,7 @@ public class coreUtils {
         for (int i = 1; i < animals.length; i++) {
             uniquehabitatsFound = true;
             for (int j = 1; j < i; j++) {
-                if (i != j && animals[i][3].equals(animals[j][3])) {
+                if (animals[i][3].equals(animals[j][3])) {
                     uniquehabitatsFound = false;
                     j = i;
                 }
